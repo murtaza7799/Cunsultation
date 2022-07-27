@@ -26,7 +26,7 @@ const SubNavbar = (): JSX.Element => {
   const loadBoardUsers = () => {
     return users.map((user, index) => (
       <Tooltip label={user.fullName} aria-label="A tooltip" key={index}>
-        <Avatar size="sm" name={user.fullName} mr="5px" src="https://bit.ly/tioluwani-kolawole" />
+        <Avatar size="sm" name={user.fullName} mr="5px" src="" />
       </Tooltip>
     ));
   };
@@ -43,7 +43,7 @@ const SubNavbar = (): JSX.Element => {
       </Heading>
       <Box>{loadBoardUsers()}</Box>
       <Box>
-        <InviteModal />
+        {/* <InviteModal /> */}
         <BoardSettings />
         <UnsplashDrawer />
       </Box>

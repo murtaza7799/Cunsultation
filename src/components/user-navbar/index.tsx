@@ -59,11 +59,11 @@ const UserNavBar: FC = () => {
 
   return (
     <Box boxShadow="sm" bg="rgba(0,0,0,0.2)" display="flex">
-      <Link href="/home">
+      {/* <Link href="/home">
         <Button size="xs" ml="5px" my="5px">
           <AiOutlineHome />
         </Button>
-      </Link>
+      </Link> */}
       <Link href="/boards">
         <Button size="xs" ml="5px" mr="10px" my="5px">
           Boards

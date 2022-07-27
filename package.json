@@ -1,7 +1,6 @@
 {
-  "name": "trello-clone",
+  "name": "website",
   "version": "1.0.0",
-  "description": "A clone of trello app which does the basic features of real world trello",
   "scripts": {
     "dev": "next dev -p 4000",
     "build": "next build",
@@ -10,17 +9,6 @@
     "format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}' --config ./.prettierrc",
     "prepare": "husky install"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/knowankit/trello-clone.git"
-  },
-  "keywords": [],
-  "author": "Ankit Kumar, Nidhi Rathee",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/knowankit/trello-clone/issues"
-  },
-  "homepage": "https://github.com/knowankit/trello-clone#readme",
   "dependencies": {
     "@chakra-ui/react": "^1.5.2",
     "@emotion/react": "^11",
