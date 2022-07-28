@@ -30,11 +30,11 @@ const WithAuth = (App) => {
         appProps = {
           reduxState: reduxStore.getState()
         };
-        ctx.res.writeHead(307, {
-          Location: '/login'
-        });
+        // ctx.res.writeHead(307, {
+        //   Location: '/login'
+        // });
 
-        ctx.res.end();
+        // ctx.res.end();
       }
 
       if (App.getInitialProps) {

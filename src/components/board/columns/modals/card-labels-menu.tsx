@@ -74,7 +74,7 @@ const CardLabel: FC<IProps> = ({ id, boardId }) => {
                   marginBottom="5px"
                   key={index}
                   onClick={() => handleClick(item)}>
-                  <Box minH="20px"></Box>
+                  <Box minH="20px">{item.type}</Box>
                 </MenuItem>
               ))}
             </MenuList>

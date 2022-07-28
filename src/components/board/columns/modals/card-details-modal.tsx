@@ -56,6 +56,8 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       columnId: card.columnId,
       assignedTo: assigned
     };
+    console.log('description');
+    console.log(description);
 
     await dispatch(updateCard(data));
     await dispatch(fetchCards());
@@ -120,15 +122,14 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
               />
             </Box>
             <Box display="flex">
-              <Box width="100%" marginTop="2rem">
+              <Box width="90%" marginTop="2rem">
                 <Box display="flex" fontWeight="bold">
                   <GrTextAlignFull />
                   <Text marginLeft="1rem">Description</Text>
                 </Box>
-                <Box marginLeft="1.5rem" minHeight="200px" width="90%">
+                <Box marginLeft="1.5rem" minHeight="200px" width="auto">
                   <QuillEditor value={description} onChange={setDescription} />
                 </Box>
-                <Text>Test</Text>
               </Box>
               <Box display="flex" flexDirection="column">
                 <CardLabel id={card._id} boardId={card.boardId} />
