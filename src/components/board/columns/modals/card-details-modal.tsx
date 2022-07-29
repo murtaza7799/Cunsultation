@@ -24,7 +24,10 @@ import { GrTextAlignFull } from 'react-icons/gr';
 import CardLabel from '@/src/components/board/columns/modals/card-labels-menu';
 import QuillEditor from '@/src/components/quill-editor';
 import { AiOutlineDown } from 'react-icons/ai';
-
+import { useReactToPrint } from 'react-to-print';
+import FileSaver, { saveAs, FileSaverOptions } from 'file-saver';
+import { pdfExporter } from 'quill-to-pdf';
+import * as quillToWord from 'quill-to-word';
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -36,7 +39,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   const [title, setTitle] = useState(card?.title);
   const [description, setDescription] = useState(card?.description);
   const [assigned, assignUser] = useState(card?.assignedTo);
-
+  const [qilldata, setQillData] = useState();
   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
   const cardDelete = useAppSelector((state) => state.cards.isDeleting);
   const users = useAppSelector((state) => state.users.users);
@@ -56,6 +59,8 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       columnId: card.columnId,
       assignedTo: assigned
     };
+    console.log('description');
+    console.log(description);
 
     await dispatch(updateCard(data));
     await dispatch(fetchCards());
@@ -63,18 +68,42 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     onClose();
   };
 
-  const handleClick = async (userId) => {
-    assignUser(userId);
-
-    const data = {
-      _id: card._id,
-      title,
-      description,
-      columnId: card.columnId,
-      assignedTo: userId
-    };
-
-    await dispatch(updateCard(data));
+  const handleClick = async (data) => {
+    console.log(qilldata);
+    // assignUser(userId);
+    // const data = {
+    //   _id: card._id,
+    //   title,
+    //   description,
+    //   columnId: card.columnId,
+    //   assignedTo: userId
+    // };
+    // await dispatch(updateCard(data));
+  };
+  const options: FileSaverOptions = {
+    autoBom: false
+  };
+  const quillToWordConfig = {
+    exportAs: 'blob'
+  };
+  const fileToBlob = async (file) =>
+    new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type });
+  const saveAsWord = async () => {
+    const data = await quillToWord.generateWord(qilldata, { exportAs: 'blob' });
+    const blob = await fileToBlob(data);
+    await saveAs(blob);
+  };
+  const saveAsPdf = async () => {
+    const pdfAsBlob = await pdfExporter.generatePdf(qilldata); // converts to PDF
+    await saveAs(pdfAsBlob, title);
+  };
+  const handlePrint = useReactToPrint({
+    content: () => stringToHTML(description)
+  });
+  const stringToHTML = function (str) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(str, 'text/html');
+    return doc.body;
   };
 
   const assignToMenu = () => {
@@ -84,12 +113,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           Share
         </MenuButton>
         <MenuList>
-          {users.map((user, index) => (
-            <MenuItem key={index} onClick={() => handleClick(user._id)}>
-              {user?.fullName}
-            </MenuItem>
-          ))}
-          <MenuItem onClick={() => handleClick('')}>Unassign</MenuItem>
+          <MenuItem onClick={saveAsPdf}>Download as PDF</MenuItem>
+          <MenuItem onClick={saveAsWord}>Download as Word</MenuItem>
+          <MenuItem onClick={handlePrint}>Print</MenuItem>
         </MenuList>
       </Menu>
     );
@@ -120,15 +146,18 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
               />
             </Box>
             <Box display="flex">
-              <Box width="100%" marginTop="2rem">
+              <Box width="90%" marginTop="2rem">
                 <Box display="flex" fontWeight="bold">
                   <GrTextAlignFull />
                   <Text marginLeft="1rem">Description</Text>
                 </Box>
-                <Box marginLeft="1.5rem" minHeight="200px" width="90%">
-                  <QuillEditor value={description} onChange={setDescription} />
+                <Box marginLeft="1.5rem" minHeight="200px" width="auto">
+                  <QuillEditor
+                    value={description}
+                    onChange={setDescription}
+                    quillContent={setQillData}
+                  />
                 </Box>
-                <Text>Test</Text>
               </Box>
               <Box display="flex" flexDirection="column">
                 <CardLabel id={card._id} boardId={card.boardId} />

@@ -16,9 +16,9 @@ const WithAuth = (App) => {
       const user = await isUserAuth();
       if (user !== null) {
         dispatch(updateUserData({ type: 'isValid', value: true }));
-        dispatch(updateUserData({ type: 'id', value: user?.uid }));
-        // dispatch(updateUserData({ type: 'email', value: user?.email }));
-        // dispatch(updateUserData({ type: 'fullName', value: 'John Doe' }));
+        dispatch(updateUserData({ type: 'id', value: user['uid'] }));
+        dispatch(updateUserData({ type: 'email', value: user['email'] }));
+        dispatch(updateUserData({ type: 'fullName', value: 'TEst Name' }));
         dispatch(fetchUser());
         appProps = {
           reduxState: reduxStore.getState()

@@ -44,7 +44,7 @@ const Login = () => {
       .signIn(values.email, values.password)
       .then(() => {
         console.log('login success');
-        window.location.href = `${window.location.origin}/home`;
+        window.location.href = `${window.location.origin}/boards`;
       })
       .catch((err) => {
         console.log('login error', err);
