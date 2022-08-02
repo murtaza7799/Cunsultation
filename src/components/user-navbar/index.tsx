@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import { useAppSelector } from '@/src/hooks';
 import { AiOutlineHome } from 'react-icons/ai';
 import { SiTrello } from 'react-icons/si';
-import * as auth from '../../../pages/services/auth';
+import * as auth from '../services/auth';
 
 const UserNavBar: FC = () => {
   const user = useAppSelector((state) => state.user);

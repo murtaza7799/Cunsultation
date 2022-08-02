@@ -16,8 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import shortId from 'shortid';
-import checkEnvironment from '@/util/check-environment';
 import { useRouter } from 'next/router';
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUp = (): JSX.Element => {
   const [values, setValues] = useState({
@@ -67,7 +67,6 @@ const SignUp = (): JSX.Element => {
     setIsCreatingStatus(true);
 
     const id = shortId.generate();
-    const host = checkEnvironment();
 
     const { email, password, confirmPassword, fullName } = values;
 
@@ -79,38 +78,38 @@ const SignUp = (): JSX.Element => {
       fullName: fullName
     };
 
-    const url = `${host}/api/register`;
+    // const url = `${host}/api/register`;
 
-    const response = await fetch(url, {
-      method: 'POST',
-      mode: 'cors',
-      cache: 'no-cache',
-      credentials: 'same-origin',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      redirect: 'follow',
-      referrerPolicy: 'no-referrer',
-      body: JSON.stringify(data)
-    });
+    // const response = await fetch(url, {
+    //   method: 'POST',
+    //   mode: 'cors',
+    //   cache: 'no-cache',
+    //   credentials: 'same-origin',
+    //   headers: {
+    //     'Content-Type': 'application/json'
+    //   },
+    //   redirect: 'follow',
+    //   referrerPolicy: 'no-referrer',
+    //   body: JSON.stringify(data)
+    // });
 
-    const result = await response.json();
-    setIsCreatingStatus(false);
+    // const result = await response.json();
+    // setIsCreatingStatus(false);
 
-    if (response.status === 404) {
-      setErrorState(true);
-    }
+    // if (response.status === 404) {
+    //   setErrorState(true);
+    // }
 
-    const { email: inviteEmail, token, boardId } = router.query;
-    const isInvitedUser = inviteEmail && token && boardId;
+    // const { email: inviteEmail, token, boardId } = router.query;
+    // const isInvitedUser = inviteEmail && token && boardId;
 
-    if (isInvitedUser && result.message === 'success') {
-      redirectToLoginPage(`/login?token=${token}&email=${inviteEmail}&boardId=${boardId}`);
-    } else {
-      if (result.message === 'success') {
-        redirectToLoginPage();
-      }
-    }
+    // if (isInvitedUser && result.message === 'success') {
+    //   redirectToLoginPage(`/login?token=${token}&email=${inviteEmail}&boardId=${boardId}`);
+    // } else {
+    //   if (result.message === 'success') {
+    //     redirectToLoginPage();
+    //   }
+    // }
   };
 
   const redirectToLoginPage = (path = '/login') => {

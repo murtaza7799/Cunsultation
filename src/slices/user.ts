@@ -22,7 +22,7 @@ const host = checkEnvironment();
 
 export const fetchUser = createAsyncThunk('users/fetchUser', async (_obj, { getState }) => {
   const { user } = getState() as { user: UserDetail };
-  console.log('fetchUser id' + user.id);
+  console.log('fetchUser id : ' + user.id);
   const q = query(collection(db, 'Users'), where('_id', '==', user.id));
   const data = {
     _id: '',
@@ -76,7 +76,7 @@ export const userSlice = createSlice({
     [fetchUser.fulfilled.toString()]: (state, { payload }) => {
       state.status = 'success';
       state.id = payload && payload._id;
-      state.email = payload && payload.email;
+      state.email = 'murtaza';
       state.fullName = payload && payload.fullName;
       console.log('state.fullName ' + state.fullName);
     },

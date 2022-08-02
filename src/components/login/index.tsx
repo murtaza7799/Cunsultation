@@ -18,7 +18,7 @@ import { useState } from 'react';
 import checkEnvironment from '@/util/check-environment';
 import { useRouter } from 'next/router';
 import inviteUser from '@/util/invite-user';
-import * as auth from '../../../pages/services/auth';
+import * as auth from '../services/auth';
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -42,7 +42,10 @@ const Login = () => {
     };
     await auth
       .signIn(values.email, values.password)
-      .then(() => {
+      .then((userCredential) => {
+        console.log('User Successfully Signed In', userCredential.user);
+        localStorage.setItem('isUser', JSON.stringify('true'));
+        localStorage.setItem('id', JSON.stringify(userCredential.user.uid));
         console.log('login success');
         window.location.href = `${window.location.origin}/boards`;
       })

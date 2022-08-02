@@ -7,6 +7,12 @@ export type CardDetail = {
   boardId?: string;
   sequence?: number;
   label?: Label;
+  questions?: Questions[];
+  images?: string[];
+};
+export type Questions = {
+  checked?: boolean;
+  value?: string;
 };
 
 export type Label = {

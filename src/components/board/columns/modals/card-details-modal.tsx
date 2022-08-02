@@ -26,8 +26,12 @@ import QuillEditor from '@/src/components/quill-editor';
 import { AiOutlineDown } from 'react-icons/ai';
 import { useReactToPrint } from 'react-to-print';
 import FileSaver, { saveAs, FileSaverOptions } from 'file-saver';
+// import { pdfExporter } from 'quill-to-pdf';
+// import * as quillToWord from 'quill-to-word';
+// import { handelPDFConverter } from './sharing';
+const quillToWord = typeof window === 'object' ? require('quill-to-word') : () => false;
 import { pdfExporter } from 'quill-to-pdf';
-import * as quillToWord from 'quill-to-word';
+// const pdfExporter = typeof window === 'object' ? require('quill-to-pdf') : () => false;
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -37,12 +41,30 @@ type Props = {
 const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState(card?.title);
+  const [images, setImages] = useState(card?.images);
   const [description, setDescription] = useState(card?.description);
   const [assigned, assignUser] = useState(card?.assignedTo);
   const [qilldata, setQillData] = useState();
   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
   const cardDelete = useAppSelector((state) => state.cards.isDeleting);
-  const users = useAppSelector((state) => state.users.users);
+  const cardQuestions = card?.questions;
+  const [questions, setQuestions] = useState(card?.questions);
+  const [inputList, setInputList] = React.useState([{ value: '', checked: false }]);
+  const [questionslist, setQuestionlist] = React.useState([{ value: '', checked: false }]);
+  console.log('images', images);
+  // React.useEffect(() => {
+  //   if (isOpen && questions?.length > 0) {
+  //     console.log('Open');
+  //     questions.map((question) => {
+  //       setInputList((questions) => [
+  //         ...questions,
+  //         { value: question.value, checked: question.checked }
+  //       ]);
+  //     });
+  //   }
+  // }, [isOpen]);
+
+  // const users = useAppSelector((state) => state.card?.questions);
 
   const handleCardDelete = async () => {
     await dispatch(deleteCard(card._id));
@@ -50,6 +72,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
 
     onClose();
   };
+  console.log('questions', questions);
 
   const handleModalClose = async () => {
     const data = {
@@ -57,7 +80,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       title,
       description,
       columnId: card.columnId,
-      assignedTo: assigned
+      questions: inputList
     };
     console.log('description');
     console.log(description);
@@ -68,34 +91,35 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     onClose();
   };
 
-  const handleClick = async (data) => {
-    console.log(qilldata);
-    // assignUser(userId);
-    // const data = {
-    //   _id: card._id,
-    //   title,
-    //   description,
-    //   columnId: card.columnId,
-    //   assignedTo: userId
-    // };
-    // await dispatch(updateCard(data));
-  };
-  const options: FileSaverOptions = {
-    autoBom: false
-  };
-  const quillToWordConfig = {
-    exportAs: 'blob'
-  };
-  const fileToBlob = async (file) =>
-    new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type });
   const saveAsWord = async () => {
-    const data = await quillToWord.generateWord(qilldata, { exportAs: 'blob' });
-    const blob = await fileToBlob(data);
-    await saveAs(blob);
+    console.log('saveAsWord');
+    try {
+      const data = await quillToWord.generateWord(qilldata, {
+        exportAs: 'blob'
+      });
+      await saveAs(data, title);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const saveAsPdf = async () => {
-    const pdfAsBlob = await pdfExporter.generatePdf(qilldata); // converts to PDF
-    await saveAs(pdfAsBlob, title);
+    import('quill-to-pdf')
+      .then((module) => {
+        console.log('quill-to-pdf');
+        module.pdfExporter
+          .generatePdf(qilldata)
+          .then((data) => {
+            console.log('data');
+            console.log(data);
+            saveAs(data, title);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   const handlePrint = useReactToPrint({
     content: () => stringToHTML(description)
@@ -105,6 +129,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     const doc = parser.parseFromString(str, 'text/html');
     return doc.body;
   };
+  const OverlayOne = () => (
+    <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+  );
 
   const assignToMenu = () => {
     return (
@@ -113,9 +140,10 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           Share
         </MenuButton>
         <MenuList>
-          <MenuItem onClick={saveAsPdf}>Download as PDF</MenuItem>
-          <MenuItem onClick={saveAsWord}>Download as Word</MenuItem>
+          <MenuItem onClick={saveAsWord}>Save as Word</MenuItem>
+          <MenuItem onClick={saveAsPdf}>Save as PDF</MenuItem>
           <MenuItem onClick={handlePrint}>Print</MenuItem>
+          <MenuItem onClick={handlePrint}>Copy</MenuItem>
         </MenuList>
       </Menu>
     );
@@ -123,10 +151,15 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
 
   return (
     <>
-      <Modal size="xl" onClose={handleModalClose} isOpen={isOpen} isCentered>
-        <ModalOverlay />
+      <Modal
+        size="xl"
+        onClose={handleModalClose}
+        isOpen={isOpen}
+        isCentered
+        scrollBehavior={'inside'}>
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
         {/* https://github.com/chakra-ui/chakra-ui/discussions/2676 */}
-        <ModalContent maxW="64rem">
+        <ModalContent display="flex" maxW="64rem">
           <ModalBody>
             {card.label && (
               <Badge bg={card.label.type} color="white">
@@ -156,6 +189,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                     value={description}
                     onChange={setDescription}
                     quillContent={setQillData}
+                    inputList={inputList}
+                    setInputList={setInputList}
+                    images={images}
                   />
                 </Box>
               </Box>

@@ -5,8 +5,11 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import NextNprogress from 'nextjs-progressbar';
 import 'regenerator-runtime/runtime';
-
 import 'nprogress/nprogress.css';
+// import initAuth from '@/util/initAuth';
+
+// // the module you created above
+// initAuth();
 
 const theme = extendTheme({
   colors: {

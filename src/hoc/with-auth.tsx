@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { setOrGetStore } from '@/util/initialise-store';
 import { updateUserData, fetchUser } from '@/src/slices/user';
-import isUserAuth from 'pages/services/userValidity';
+import isUserAuth from '../components/services/userValidity';
 
 const WithAuth = (App) => {
   return class AppWithAuth extends Component {
