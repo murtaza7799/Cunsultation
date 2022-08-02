@@ -78,7 +78,7 @@ export const deleteColumn = createAsyncThunk(
       console.log(getId.id);
       if (getId.id !== null) {
         console.log('deleting card');
-        const docRef = await deleteDoc(doc(db, 'cards', getId.id));
+        const docRef = await deleteDoc(doc(db, 'columns', getId.id));
         return docRef;
       }
     } catch (error) {

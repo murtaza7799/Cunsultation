@@ -130,7 +130,7 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
       <br></br>
       <Box display={'flex'}>
         <Box>
-          {images !== undefined && imageSketches()}
+          {/* {images !== undefined && imageSketches()} */}
           {/* {imageSketches()} */}
           <br />
           <InsertCheckBox inputList={inputList} setInputList={setInputList} />
