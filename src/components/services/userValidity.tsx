@@ -11,20 +11,20 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 //     return null;
 //   }
 // }
-// function getCurrentUser(auth) {
-//   return new Promise((resolve, reject) => {
-//     const unsubscribe = auth.onAuthStateChanged((user) => {
-//       unsubscribe();
-//       resolve(user);
-//     }, reject);
-//   });
-// }
+function getCurrentUser(auth) {
+  return new Promise((resolve, reject) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      unsubscribe();
+      resolve(user);
+    }, reject);
+  });
+}
 const isUserAuth = async () => {
-  // const check = await getCurrentUser(auth);
-  // if (check !== null) {
-  //   console.log('User Already Successful check at validity', check);
-  //   return check;
-  // }
+  const check = await getCurrentUser(auth);
+  if (check !== null) {
+    console.log('User Already Successful check at validity', check);
+    return check;
+  }
   return null;
 };
 export default isUserAuth;
