@@ -67,7 +67,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       columnId: card.columnId,
       questions: inputList
     };
-    console.log('description');
+    // console.log('description');
     console.log(description);
 
     await dispatch(updateCard(data));
@@ -176,7 +176,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                     quillContent={setQillData}
                     inputList={inputList}
                     setInputList={setInputList}
-                    images={''}
+                    images={images}
                   />
                 </Box>
               </Box>

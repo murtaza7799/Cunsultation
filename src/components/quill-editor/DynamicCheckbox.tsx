@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Box, Button, Checkbox, CheckboxGroup, Input, Stack } from '@chakra-ui/react';
 import styles from './checkbox.module.scss';
-InsertCheckBox.propTypes = {
-  values: PropTypes.array.isRequired
-};
+// InsertCheckBox.propTypes = {
+//   values: PropTypes.array.isRequired
+// };
 export default function InsertCheckBox({ inputList, setInputList }) {
   // handle input change
   console.log('inputlist at chck box', inputList);
