@@ -24,8 +24,7 @@ import { GrTextAlignFull } from 'react-icons/gr';
 import CardLabel from '@/src/components/board/columns/modals/card-labels-menu';
 import QuillEditor from '@/src/components/quill-editor';
 import { AiOutlineDown } from 'react-icons/ai';
-import { useReactToPrint } from 'react-to-print';
-import FileSaver, { saveAs, FileSaverOptions } from 'file-saver';
+import FileSaver, { saveAs } from 'file-saver';
 // import { pdfExporter } from 'quill-to-pdf';
 // import * as quillToWord from 'quill-to-word';
 // import { handelPDFConverter } from './sharing';
@@ -43,28 +42,14 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   const [title, setTitle] = useState(card?.title);
   const [images, setImages] = useState(card?.images);
   const [description, setDescription] = useState(card?.description);
-  const [assigned, assignUser] = useState(card?.assignedTo);
+
   const [qilldata, setQillData] = useState();
   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
   const cardDelete = useAppSelector((state) => state.cards.isDeleting);
-  const cardQuestions = card?.questions;
+  // const cardQuestions = card?.questions;
   const [questions, setQuestions] = useState(card?.questions);
   const [inputList, setInputList] = React.useState([{ value: '', checked: false }]);
-  const [questionslist, setQuestionlist] = React.useState([{ value: '', checked: false }]);
-  console.log('images', images);
-  // React.useEffect(() => {
-  //   if (isOpen && questions?.length > 0) {
-  //     console.log('Open');
-  //     questions.map((question) => {
-  //       setInputList((questions) => [
-  //         ...questions,
-  //         { value: question.value, checked: question.checked }
-  //       ]);
-  //     });
-  //   }
-  // }, [isOpen]);
-
-  // const users = useAppSelector((state) => state.card?.questions);
+  // const [questionslist, setQuestionlist] = React.useState([{ value: '', checked: false }]);
 
   const handleCardDelete = async () => {
     await dispatch(deleteCard(card._id));
@@ -91,47 +76,47 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     onClose();
   };
 
-  const saveAsWord = async () => {
-    console.log('saveAsWord');
-    try {
-      const data = await quillToWord.generateWord(qilldata, {
-        exportAs: 'blob'
-      });
-      await saveAs(data, title);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const saveAsPdf = async () => {
-    import('quill-to-pdf')
-      .then((module) => {
-        console.log('quill-to-pdf');
-        module.pdfExporter
-          .generatePdf(qilldata)
-          .then((data) => {
-            console.log('data');
-            console.log(data);
-            saveAs(data, title);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-  const handlePrint = useReactToPrint({
-    content: () => stringToHTML(description)
-  });
-  const stringToHTML = function (str) {
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(str, 'text/html');
-    return doc.body;
-  };
-  const OverlayOne = () => (
-    <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
-  );
+  // const saveAsWord = async () => {
+  //   console.log('saveAsWord');
+  //   try {
+  //     const data = await quillToWord.generateWord(qilldata, {
+  //       exportAs: 'blob'
+  //     });
+  //     await saveAs(data, title);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // const saveAsPdf = async () => {
+  //   import('quill-to-pdf')
+  //     .then((module) => {
+  //       console.log('quill-to-pdf');
+  //       module.pdfExporter
+  //         .generatePdf(qilldata)
+  //         .then((data) => {
+  //           console.log('data');
+  //           console.log(data);
+  //           saveAs(data, title);
+  //         })
+  //         .catch((error) => {
+  //           console.log(error);
+  //         });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //     });
+  // };
+  // const handlePrint = useReactToPrint({
+  //   content: () => stringToHTML(description)
+  // });
+  // const stringToHTML = function (str) {
+  //   const parser = new DOMParser();
+  //   const doc = parser.parseFromString(str, 'text/html');
+  //   return doc.body;
+  // };
+  // const OverlayOne = () => (
+  //   <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+  // );
 
   const assignToMenu = () => {
     return (
@@ -140,10 +125,10 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           Share
         </MenuButton>
         <MenuList>
-          <MenuItem onClick={saveAsWord}>Save as Word</MenuItem>
-          <MenuItem onClick={saveAsPdf}>Save as PDF</MenuItem>
-          <MenuItem onClick={handlePrint}>Print</MenuItem>
-          <MenuItem onClick={handlePrint}>Copy</MenuItem>
+          {/* <MenuItem onClick={saveAsWord}>Save as Word</MenuItem>
+          <MenuItem onClick={saveAsPdf}>Save as PDF</MenuItem> */}
+          {/* <MenuItem onClick={handlePrint}>Print</MenuItem>
+          <MenuItem onClick={handlePrint}>Copy</MenuItem> */}
         </MenuList>
       </Menu>
     );
@@ -191,7 +176,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                     quillContent={setQillData}
                     inputList={inputList}
                     setInputList={setInputList}
-                    images={images}
+                    images={''}
                   />
                 </Box>
               </Box>
