@@ -23,7 +23,6 @@ const UserNavBar: FC = () => {
 
   const logout = async () => {
     await auth.logout();
-    const host = checkEnvironment();
 
     const url = `/api/logout`;
 
