@@ -40,7 +40,7 @@ const Login = () => {
       password: values.password
     };
 
-    const url = `${host}/api/login`;
+    const url = `/api/login`;
 
     const response = await fetch(url, {
       method: 'POST',
