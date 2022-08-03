@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
-// import InsertCheckBox from './DynamicCheckbox';
+import InsertCheckBox from './DynamicCheckbox';
 
 const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, images }) => {
   // const [url, setUrl] = React.useState([]);
@@ -94,28 +94,28 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
       quill.insertEmbed(finalPosition, 'image', url, 'user');
     }
   };
-  // const imageSketches = () => {
-  //   return (
-  //     <Menu>
-  //       <MenuButton display={'flex'} as={Button} size="xs" rightIcon={<AiOutlineDown />}>
-  //         Insert Sketch
-  //       </MenuButton>
-  //       <MenuList zIndex="dropdown" maxHeight={'60vh'} overflowY={'scroll'}>
-  //         {images.map((user, index) => (
-  //           <MenuItem key={index}>
-  //             <Image
-  //               objectFit="cover"
-  //               boxSize="200px"
-  //               src={user}
-  //               alt="Segun Adebayo"
-  //               onClick={() => handleClick(user)}
-  //             />
-  //           </MenuItem>
-  //         ))}
-  //       </MenuList>
-  //     </Menu>
-  //   );
-  // };
+  const imageSketches = () => {
+    return (
+      <Menu>
+        <MenuButton display={'flex'} as={Button} size="xs" rightIcon={<AiOutlineDown />}>
+          Insert Sketch
+        </MenuButton>
+        <MenuList zIndex="dropdown" maxHeight={'60vh'} overflowY={'scroll'}>
+          {images.map((user, index) => (
+            <MenuItem key={index}>
+              <Image
+                objectFit="cover"
+                boxSize="200px"
+                src={user}
+                alt="Segun Adebayo"
+                onClick={() => handleClick(user)}
+              />
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+    );
+  };
 
   return (
     <Box mx={'auto'}>
@@ -126,9 +126,9 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
       <Box display={'flex'}>
         <Box>
           {/* {images !== undefined && imageSketches()} */}
-          {/* {imageSketches()} */}
+          {imageSketches()}
           <br />
-          {/* <InsertCheckBox inputList={inputList} setInputList={setInputList} /> */}
+          <InsertCheckBox inputList={inputList} setInputList={setInputList} />
         </Box>
         <IconButton
           spinner={listening}
