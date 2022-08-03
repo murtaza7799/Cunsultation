@@ -18,7 +18,6 @@ import { useState } from 'react';
 import checkEnvironment from '@/util/check-environment';
 import { useRouter } from 'next/router';
 import inviteUser from '@/util/invite-user';
-import * as auth from '../services/auth';
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -40,57 +39,41 @@ const Login = () => {
       email: values.email,
       password: values.password
     };
-    await auth
-      .signIn(values.email, values.password)
-      .then((userCredential) => {
-        console.log('User Successfully Signed In', userCredential.user);
-        localStorage.setItem('isUser', JSON.stringify('true'));
-        localStorage.setItem('id', JSON.stringify(userCredential.user.uid));
-        console.log('login success');
+
+    const url = `${host}/api/login`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    setIsFetching(false);
+
+    const { email: inviteEmail, token, boardId } = router.query;
+    const isInvitedUser = inviteEmail && token && boardId;
+
+    if (isInvitedUser && result.message === 'success') {
+      const hasInvited = await inviteUser({ email: inviteEmail, boardId });
+
+      if (hasInvited) {
         window.location.href = `${window.location.origin}/boards`;
-      })
-      .catch((err) => {
-        console.log('login error', err);
-        setErrorState(true);
-      })
-      .finally(() => {
-        setIsFetching(false);
-      });
+      }
+    } else if (result.message === 'success') {
+      window.location.href = `${window.location.origin}/boards`;
+    }
 
-    // const url = `${host}/api/login`;
-
-    // const response = await fetch(url, {
-    //   method: 'POST',
-    //   mode: 'cors',
-    //   cache: 'no-cache',
-    //   credentials: 'same-origin',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   redirect: 'follow',
-    //   referrerPolicy: 'no-referrer',
-    //   body: JSON.stringify(data)
-    // });
-
-    // const result = await response.json();
-    // setIsFetching(false);
-
-    // const { email: inviteEmail, token, boardId } = router.query;
-    // const isInvitedUser = inviteEmail && token && boardId;
-
-    // if (isInvitedUser && result.message === 'success') {
-    //   const hasInvited = await inviteUser({ email: inviteEmail, boardId });
-
-    //   if (hasInvited) {
-    //     window.location.href = `${window.location.origin}/home`;
-    //   }
-    // } else if (result.message === 'success') {
-    //   window.location.href = `${window.location.origin}/home`;
-    // }
-
-    // if (response.status === 404) {
-    //   setErrorState(true);
-    // }
+    if (response.status === 404) {
+      setErrorState(true);
+    }
   };
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {

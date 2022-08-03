@@ -17,6 +17,7 @@ import {
 import { useState } from 'react';
 import shortId from 'shortid';
 import { useRouter } from 'next/router';
+import checkEnvironment from '@/util/check-environment';
 // import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUp = (): JSX.Element => {
@@ -61,12 +62,23 @@ const SignUp = (): JSX.Element => {
       isClosable: true
     });
   };
+  const errorToast = (error) => {
+    toast({
+      position: 'bottom',
+      title: 'Error in registering User.',
+      description: error,
+      status: 'error',
+      duration: 4500,
+      isClosable: true
+    });
+  };
 
   const registerUser = async (e) => {
     e.preventDefault();
     setIsCreatingStatus(true);
 
     const id = shortId.generate();
+    console.log('register user');
 
     const { email, password, confirmPassword, fullName } = values;
 
@@ -77,39 +89,41 @@ const SignUp = (): JSX.Element => {
       confirmPassword: confirmPassword,
       fullName: fullName
     };
+    const host = checkEnvironment();
 
-    // const url = `${host}/api/register`;
+    const url = `${host}/api/register`;
 
-    // const response = await fetch(url, {
-    //   method: 'POST',
-    //   mode: 'cors',
-    //   cache: 'no-cache',
-    //   credentials: 'same-origin',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   redirect: 'follow',
-    //   referrerPolicy: 'no-referrer',
-    //   body: JSON.stringify(data)
-    // });
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
 
-    // const result = await response.json();
-    // setIsCreatingStatus(false);
+    const result = await response.json();
+    setIsCreatingStatus(false);
 
-    // if (response.status === 404) {
-    //   setErrorState(true);
-    // }
+    if (response.status === 404) {
+      errorToast(result.message);
+      // setErrorState(true);
+    }
 
-    // const { email: inviteEmail, token, boardId } = router.query;
-    // const isInvitedUser = inviteEmail && token && boardId;
+    const { email: inviteEmail, token, boardId } = router.query;
+    const isInvitedUser = inviteEmail && token && boardId;
 
-    // if (isInvitedUser && result.message === 'success') {
-    //   redirectToLoginPage(`/login?token=${token}&email=${inviteEmail}&boardId=${boardId}`);
-    // } else {
-    //   if (result.message === 'success') {
-    //     redirectToLoginPage();
-    //   }
-    // }
+    if (isInvitedUser && result.message === 'success') {
+      redirectToLoginPage(`/login?token=${token}&email=${inviteEmail}&boardId=${boardId}`);
+    } else {
+      if (result.message === 'success') {
+        redirectToLoginPage();
+      }
+    }
   };
 
   const redirectToLoginPage = (path = '/login') => {

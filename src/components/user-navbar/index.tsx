@@ -16,12 +16,36 @@ import { useAppSelector } from '@/src/hooks';
 import { AiOutlineHome } from 'react-icons/ai';
 import { SiTrello } from 'react-icons/si';
 import * as auth from '../services/auth';
+import checkEnvironment from '@/util/check-environment';
 
 const UserNavBar: FC = () => {
   const user = useAppSelector((state) => state.user);
 
   const logout = async () => {
     await auth.logout();
+    const host = checkEnvironment();
+    console.log('logout');
+
+    const url = `${host}/api/logout`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify({})
+    });
+
+    const responseInJson = await response.json();
+
+    if (responseInJson.message === 'success') {
+      window.location.href = `${window.location.origin}/login`;
+    }
   };
 
   const renderButtons = () => {

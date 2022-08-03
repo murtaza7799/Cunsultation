@@ -16,6 +16,7 @@ import {
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
 import InsertCheckBox from './DynamicCheckbox';
+import BlotFormatter from 'quill-blot-formatter';
 
 const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, images }) => {
   // const [url, setUrl] = React.useState([]);
@@ -24,9 +25,15 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
     finalTranscript,
     listening,
     resetTranscript,
-    browserSupportsSpeechRecognition
+    browserSupportsSpeechRecognition,
+    SpeechRecognition
   } = useSpeechRecognition();
-  const { quill, quillRef } = useQuill();
+  // if (typeof window !== 'undefined')
+  const { quill, quillRef, Quill } = useQuill();
+  if (typeof window === 'object') {
+    console.log('unsupported');
+    // if (Quill && !quill) Quill.register('modules/blotFormatter', BlotFormatter);
+  }
   React.useEffect(() => {
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML(value);
@@ -37,9 +44,9 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
     if (listening && quill) {
       const range = quill?.getSelection();
       const position = range ? range.index : 0;
-      console.log('position ' + position);
+      // console.log('position ' + position);
       const finalPosition = position;
-      console.log(finalTranscript);
+      // console.log(finalTranscript);
       quill.insertText(finalPosition, ' ' + finalTranscript);
       resetTranscript();
     }
@@ -88,8 +95,8 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
       console.log('position ' + position);
       const finalPosition = position;
       // eslint-disable-next-line jsx-a11y/img-redundant-alt
-      const source = <img src="img_5terre.jpg" alt="Cinque Terre" width="600" height="400" />;
-      console.log(source);
+      // const source = <img src="img_5terre.jpg" alt="Cinque Terre" width="600" height="400" />;
+      // console.log(source);
       // quill.insertText(finalPosition, 'image', source);
       quill.insertEmbed(finalPosition, 'image', url, 'user');
     }
@@ -128,7 +135,7 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
           {/* {images !== undefined && imageSketches()} */}
           {imageSketches()}
           <br />
-          <InsertCheckBox inputList={inputList} setInputList={setInputList} />
+          {/* <InsertCheckBox inputList={inputList} setInputList={setInputList} /> */}
         </Box>
         <IconButton
           spinner={listening}

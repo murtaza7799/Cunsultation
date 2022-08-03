@@ -1,3 +1,4 @@
+/* eslint-disable no-var */
 import React, { FC, useState } from 'react';
 import {
   Modal,
@@ -30,6 +31,7 @@ import FileSaver, { saveAs } from 'file-saver';
 // import { handelPDFConverter } from './sharing';
 const quillToWord = typeof window === 'object' ? require('quill-to-word') : () => false;
 import { pdfExporter } from 'quill-to-pdf';
+import { useReactToPrint } from 'react-to-print';
 // const pdfExporter = typeof window === 'object' ? require('quill-to-pdf') : () => false;
 type Props = {
   onClose: () => void;
@@ -57,7 +59,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
 
     onClose();
   };
-  console.log('questions', questions);
+  // console.log('questions', questions);
 
   const handleModalClose = async () => {
     const data = {
@@ -106,17 +108,51 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   //       console.log(error);
   //     });
   // };
-  // const handlePrint = useReactToPrint({
-  //   content: () => stringToHTML(description)
-  // });
-  // const stringToHTML = function (str) {
-  //   const parser = new DOMParser();
-  //   const doc = parser.parseFromString(str, 'text/html');
-  //   return doc.body;
-  // };
-  // const OverlayOne = () => (
-  //   <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
-  // );
+  const handlePrint = useReactToPrint({
+    content: () => stringToHTML(description)
+  });
+  const stringToHTML = function (str) {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(str, 'text/html');
+    return doc.body;
+  };
+  function validateXML(txt) {
+    // Mozilla, Firefox, Opera, newer IE and Edge, etc.
+    // if (document.implementation.createDocument) {
+    //   console.log('Before creating domparser');
+    //   const parser = new DOMParser();
+    //   try {
+    //     var xmlDoc = parser.parseFromString(txt, 'text/xml');
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    //   console.log(
+    //     'After DomParser instance. Errors: ' + xmlDoc.getElementsByTagName('parsererror').length
+    //   );
+    //   if (xmlDoc.getElementsByTagName('parsererror').length > 0) {
+    //     return xmlDoc.getElementsByTagName('parsererror')[0];
+    //   } else {
+    //     return 'No errors found';
+    //   }
+    // }
+    // code for older IE
+    // else if (window.ActiveXObject) {
+    //   var xmlDoc = new ActiveXObject('Microsoft.XMLDOM');
+    //   xmlDoc.async = 'false';
+    //   xmlDoc.loadXML(txt);
+    //   if (xmlDoc.parseError.errorCode != 0) {
+    //     txt = 'Error Code: ' + xmlDoc.parseError.errorCode + '\\n';
+    //     txt = txt + 'Error Reason: ' + xmlDoc.parseError.reason;
+    //     txt = txt + 'Error Line: ' + xmlDoc.parseError.line;
+    //     console.log('I work in Windows IE');
+    //     return txt;
+    //   } else {
+    //     return 'No errors found';
+    //   }
+    // } else {
+    //   return 'Your browser does not support XML validation';
+    // }
+  }
 
   const assignToMenu = () => {
     return (
@@ -125,10 +161,10 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           Share
         </MenuButton>
         <MenuList>
-          {/* <MenuItem onClick={saveAsWord}>Save as Word</MenuItem>
-          <MenuItem onClick={saveAsPdf}>Save as PDF</MenuItem> */}
-          {/* <MenuItem onClick={handlePrint}>Print</MenuItem>
-          <MenuItem onClick={handlePrint}>Copy</MenuItem> */}
+          {/* <MenuItem onClick={saveAsWord}>Save as Word</MenuItem> */}
+          {/* <MenuItem onClick={saveAsPdf}>Save as PDF</MenuItem> */}
+          <MenuItem onClick={handlePrint}>Print</MenuItem>
+          <MenuItem onClick={handlePrint}>Copy</MenuItem>
         </MenuList>
       </Menu>
     );
