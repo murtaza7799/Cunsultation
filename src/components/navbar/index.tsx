@@ -14,34 +14,26 @@ const NavBar: FC<IProps> = ({ bg }) => {
   const user = useAppSelector((state) => state.user);
 
   const logout = async () => {
-    auth
-      .signOut()
-      .then(() => {
-        window.location.href = `${window.location.origin}/login`;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // const URL = '/api/logout';
+    const URL = '/api/logout';
 
-    // const response = await fetch(URL, {
-    //   method: 'POST',
-    //   mode: 'cors',
-    //   cache: 'no-cache',
-    //   credentials: 'same-origin',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   redirect: 'follow',
-    //   referrerPolicy: 'no-referrer',
-    //   body: JSON.stringify({})
-    // });
+    const response = await fetch(URL, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify({})
+    });
 
-    // const responseInJson = await response.json();
+    const responseInJson = await response.json();
 
-    // if (responseInJson.message === 'success') {
-    //   window.location.href = `${window.location.origin}/login`;
-    // }
+    if (responseInJson.message === 'success') {
+      window.location.href = `${window.location.origin}/login`;
+    }
   };
 
   const renderButtons = () => {

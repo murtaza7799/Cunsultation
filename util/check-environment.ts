@@ -1,9 +1,10 @@
-import { useRouter } from 'next/router';
 export default function checkEnvironment(): string {
   function getURL() {
-    const { href } = window.location;
-    const origin = getLocationOrigin();
-    return href.substring(origin.length);
+    if (typeof window !== 'undefined') {
+      const { href } = window.location;
+      const origin = getLocationOrigin();
+      return href.substring(origin.length);
+    }
   }
   function getLocationOrigin() {
     const { protocol, hostname, port } = window.location;

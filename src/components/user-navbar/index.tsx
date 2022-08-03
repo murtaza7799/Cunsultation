@@ -24,9 +24,8 @@ const UserNavBar: FC = () => {
   const logout = async () => {
     await auth.logout();
     const host = checkEnvironment();
-    console.log('logout');
 
-    const url = `${host}/api/logout`;
+    const url = `/api/logout`;
 
     const response = await fetch(url, {
       method: 'POST',
