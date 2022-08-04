@@ -37,34 +37,35 @@ const isValidUser = (ctx): UserValidProps => {
     } else {
       return { isValid: false };
     }
-  } else {
-    // Is code running on the client
-    // const token = localStorage.getItem('token');
-
-    // try {
-    //   isAuthenticated = verify(token, KEY);
-    // } catch (e) {
-    //   console.log('Invalid user');
-    // }
-    if (ctx.req && ctx.req.headers && ctx.req.headers.cookie) {
-      const cookies = cookie.parse(ctx.req.headers.cookie);
-      const token = cookies.token;
-      console.log('token', token);
-
-      try {
-        isAuthenticated = verify(token, KEY);
-      } catch (e) {
-        console.log('Invalid user');
-      }
-    }
-    // Use !isAuthenticated for error cases
-    // If it is a valid token then let them in else redirect to the login page
-    if (isAuthenticated?.user) {
-      return { id: isAuthenticated?.user.id, isValid: true };
-    } else {
-      return { isValid: false };
-    }
   }
+  //  else {
+  //   // Is code running on the client
+  //   // const token = localStorage.getItem('token');
+
+  //   // try {
+  //   //   isAuthenticated = verify(token, KEY);
+  //   // } catch (e) {
+  //   //   console.log('Invalid user');
+  //   // }
+  //   if (ctx.req && ctx.req.headers && ctx.req.headers.cookie) {
+  //     const cookies = cookie.parse(ctx.req.headers.cookie);
+  //     const token = cookies.token;
+  //     console.log('token', token);
+
+  //     try {
+  //       isAuthenticated = verify(token, KEY);
+  //     } catch (e) {
+  //       console.log('Invalid user');
+  //     }
+  //   }
+  //   // Use !isAuthenticated for error cases
+  //   // If it is a valid token then let them in else redirect to the login page
+  //   if (isAuthenticated?.user) {
+  //     return { id: isAuthenticated?.user.id, isValid: true };
+  //   } else {
+  //     return { isValid: false };
+  //   }
+  // }
 };
 
 export default isValidUser;
