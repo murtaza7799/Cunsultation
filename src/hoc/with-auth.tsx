@@ -12,12 +12,11 @@ const WithAuth = (App) => {
     static async getInitialProps(ctx) {
       let appProps = {};
       console.log('getInitialProps');
-      console.log('ctx.req', ctx.req);
       const reduxStore = setOrGetStore();
       const { dispatch } = reduxStore;
 
       const userDetails = isValidUser(ctx);
-
+      console.log('userDetails', userDetails);
       if (userDetails && !userDetails.isValid) {
         ctx.res.writeHead(307, {
           Location: '/login'

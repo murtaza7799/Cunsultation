@@ -18,6 +18,8 @@ const WithStore = (App) => {
       if (App.getInitialProps) {
         appProps = await App.getInitialProps(ctx);
       }
+      console.log('getInitialProps with store');
+      console.log('ctx', ctx);
 
       return {
         ...appProps,

@@ -7,7 +7,8 @@ const LoginPageWithStore = withStore(Login);
 
 LoginPageWithStore.getInitialProps = async (ctx) => {
   const reduxStore = setOrGetStore();
-
+  // console.log('getInitialProps');
+  // console.log('ctx', ctx);
   const userDetails = isValidUser(ctx);
 
   if (userDetails && userDetails.isValid) {
