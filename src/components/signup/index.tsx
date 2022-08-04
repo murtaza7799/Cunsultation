@@ -91,7 +91,7 @@ const SignUp = (): JSX.Element => {
     };
     const host = checkEnvironment();
 
-    const url = `${host}/api/register`;
+    const url = `/api/register`;
 
     const response = await fetch(url, {
       method: 'POST',

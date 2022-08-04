@@ -50,7 +50,7 @@ export const fetchUser = createAsyncThunk('users/fetchUser', async (_obj, { getS
 });
 
 export const verifyEmail = createAsyncThunk('verify-email', async (email) => {
-  const response = await fetch(`${host}/api/verify-email/?email=${email}`);
+  const response = await fetch(`/api/verify-email/?email=${email}`);
   const responseInjson = await response.json();
 
   return responseInjson;

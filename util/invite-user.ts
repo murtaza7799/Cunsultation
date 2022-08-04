@@ -2,7 +2,7 @@ import checkEnvironment from '@/util/check-environment';
 
 const verifyToken = async ({ email, boardId }) => {
   const host = checkEnvironment();
-  const URL = `${host}/api/invite-user`;
+  const URL = `/api/invite-user`;
   const data = {
     email,
     boardId

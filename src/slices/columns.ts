@@ -85,7 +85,7 @@ export const deleteColumn = createAsyncThunk(
       console.log(error);
     }
 
-    // const url = `${host}/api/boards/${board.board._id}/columns/${columnId}`;
+    // const url = `/api/boards/${board.board._id}/columns/${columnId}`;
 
     // const response = await fetch(url, {
     //   method: 'DELETE',

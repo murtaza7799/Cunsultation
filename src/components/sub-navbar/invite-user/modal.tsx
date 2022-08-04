@@ -44,7 +44,7 @@ const InviteModal = () => {
   };
 
   const sendEmail = async () => {
-    const url = `${host}/api/mail`;
+    const url = `/api/mail`;
 
     const response = await fetch(url, {
       method: 'POST',

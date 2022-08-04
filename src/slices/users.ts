@@ -19,7 +19,7 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async (obj, { get
   users = [...users, createdBy];
   let userPromise = [];
   for (let i = 0; i < users.length; i++) {
-    userPromise.push(fetch(`${host}/api/users/${users[i]}`));
+    userPromise.push(fetch(`/api/users/${users[i]}`));
   }
   userPromise = await Promise.all(userPromise);
   const jsonPromise = [];
