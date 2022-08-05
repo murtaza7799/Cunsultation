@@ -81,11 +81,6 @@ const UserNavBar: FC = () => {
 
   return (
     <Box boxShadow="sm" bg="rgba(0,0,0,0.2)" display="flex">
-      {/* <Link href="/home">
-        <Button size="xs" ml="5px" my="5px">
-          <AiOutlineHome />
-        </Button>
-      </Link> */}
       <Link href="/boards">
         <Button size="xs" ml="5px" mr="10px" my="5px">
           Boards
@@ -96,7 +91,7 @@ const UserNavBar: FC = () => {
         <SiTrello />
       </Box>
       <Text fontWeight="bold" fontSize="20px" mt="2px" color="white">
-        website
+        ROOKS
       </Text>
       <Spacer />
       {renderButtons()}
