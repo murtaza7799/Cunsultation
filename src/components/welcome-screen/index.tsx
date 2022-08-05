@@ -1,7 +1,6 @@
 import React from 'react';
 import NavBar from '@/src/components/navbar';
 import { Box, Image, Flex, Text } from '@chakra-ui/react';
-import Footer from '../footer';
 
 const WelcomeScreen = (): JSX.Element => {
   return (
@@ -46,11 +45,11 @@ const WelcomeScreen = (): JSX.Element => {
               alt="brand logo"></Image>
           </Box>
         </Flex>
-        <Box m={'10'}>
-          <Text fontSize={'md'} textAlign={'center'}>
-            © 2022 ROOKS All rights reserved
-          </Text>
-        </Box>
+      </Box>
+      <Box m={'4'}>
+        <Text fontSize={'md'} textAlign={'center'}>
+          © 2022 ROOKS All rights reserved
+        </Text>
       </Box>
     </>
   );
