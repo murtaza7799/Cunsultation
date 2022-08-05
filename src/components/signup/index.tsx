@@ -12,7 +12,8 @@ import {
   AlertDescription,
   CloseButton,
   AlertTitle,
-  AlertIcon
+  AlertIcon,
+  Text
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import shortId from 'shortid';
@@ -170,19 +171,29 @@ const SignUp = (): JSX.Element => {
   };
 
   return (
-    <>
+    <Box
+      w={'full'}
+      h={'100vh'}
+      backgroundImage={
+        'url(https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)'
+      }
+      backgroundSize={'cover'}
+      backgroundPosition={'center center'}>
       <Box display="flex">
-        <Image
+        <Text
+          color={'white'}
+          fontSize="xl"
+          fontWeight="bold"
           height="30px"
           ml="auto"
           mr="auto"
-          my="40px"
-          src="/trello-logo.svg"
-          display="inline-block"
-          alt="brand logo"
-        />
+          my="40px">
+          ROOKS
+        </Text>
       </Box>
       <Flex
+        backdropFilter="auto"
+        bg="none"
         alignItems="center"
         flexDirection={['column', 'column', 'row', 'row']}
         justifyContent="center">
@@ -211,7 +222,7 @@ const SignUp = (): JSX.Element => {
           boxShadow="rgb(0 0 0 / 10%) 0 0 10px">
           <Box
             textAlign="center"
-            color="#5E6C84"
+            color="black"
             mt="5"
             mb="25"
             fontSize={['10px', '10px', '15px', '15px']}
@@ -269,6 +280,11 @@ const SignUp = (): JSX.Element => {
               color="white"
               onClick={registerUser}
               isLoading={isCreating}
+              bgGradient="linear(to-r, red.400,pink.400)"
+              _hover={{
+                bgGradient: 'linear(to-r, red.400,pink.400)',
+                boxShadow: 'xl'
+              }}
               loadingText="Registering">
               Sign up
             </Button>
@@ -281,7 +297,7 @@ const SignUp = (): JSX.Element => {
           </Box>
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChakraProvider, extendTheme } from '@chakra-ui/react';
+import { Box, ChakraProvider, extendTheme, Stack, Text, useColorModeValue } from '@chakra-ui/react';
 import '@/src/styles/default.css';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
@@ -18,8 +18,8 @@ const theme = extendTheme({
     danger: '#eb5a46',
     info: '#ff9f1a',
     warning: '#f2d600',
-    darkblue: '#eae6ff',
-    lightblue: '#f2faf9',
+    darkblue: '#FFFFFF',
+    lightblue: '#FFFFFF',
     performance: '#0079bf',
     bug: '#eb5a46',
     feature: '#61bd4f',
@@ -29,16 +29,23 @@ const theme = extendTheme({
 
 const TrelloApp = ({ Component, pageProps }) => {
   return (
-    <>
+    <Box
+      w={'full'}
+      h={'100vh'}
+      backgroundImage={
+        'url(https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)'
+      }
+      backgroundSize={'cover'}
+      backgroundPosition={'center center'}>
       <Head>
         <title>ROOKS</title>
         <link rel="shortcut icon" href="/trello-icon.svg"></link>
       </Head>
-      <NextNprogress color="#0079bf" startPosition={0.3} stopDelayMs={200} height={4} />
+      <NextNprogress color="#70b500" startPosition={0.3} stopDelayMs={200} height={4} />
       <ChakraProvider theme={theme}>
         <Component {...pageProps} />
       </ChakraProvider>
-    </>
+    </Box>
   );
 };
 

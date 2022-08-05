@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { Button, Image, Flex, Box, Spacer } from '@chakra-ui/react';
+import { Button, Image, Flex, Box, Spacer, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { useAppSelector } from '@/src/hooks';
@@ -39,14 +39,7 @@ const NavBar: FC<IProps> = ({ bg }) => {
   const renderButtons = () => {
     if (user?.isValid) {
       return (
-        <Button
-          fontSize="20"
-          color="danger"
-          variant="link"
-          float="right"
-          mr="2"
-          pr="2"
-          onClick={logout}>
+        <Button fontSize="20" m="4" float="right" mr="4" pr="4" onClick={logout}>
           <GrLogout />
         </Button>
       );
@@ -54,10 +47,18 @@ const NavBar: FC<IProps> = ({ bg }) => {
 
     return (
       <>
-        <Button fontSize="20" color="brand" variant="link" float="right" mr="2" pr="2">
+        <Button fontSize="md" float="right" m="4" bg={'gray.200'} color={'gray.800'}>
           <Link href="/login">Log in</Link>
         </Button>
-        <Button fontSize="md" colorScheme="green" color="white" m="4">
+        <Button
+          fontSize="md"
+          color="white"
+          m="4"
+          bgGradient="linear(to-r, red.400,pink.400)"
+          _hover={{
+            bgGradient: 'linear(to-r, red.400,pink.400)',
+            boxShadow: 'xl'
+          }}>
           <Link href="/signup">Sign up</Link>
         </Button>
       </>
@@ -65,9 +66,12 @@ const NavBar: FC<IProps> = ({ bg }) => {
   };
 
   return (
-    <Box bg={bg} boxShadow="md">
+    <Box boxShadow="md" borderWidth="1px">
       <Flex>
-        <Image height="8" src="/trello-logo.svg" alt="brand logo" m="5"></Image>
+        {/* <Image height="8" src="/trello-logo.svg" alt="brand logo" m="5"></Image> */}
+        <Text fontSize="lg" fontWeight="bold" m="5" color={'white'}>
+          ROOKS
+        </Text>
         <Spacer />
         {renderButtons()}
       </Flex>

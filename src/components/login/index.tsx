@@ -103,12 +103,11 @@ const Login = () => {
   };
 
   return (
-    <>
+    <Box>
       <Box display="flex" justifyContent="center" alignItems="center" my="40px">
-        <Image height="20px" mt="2" src="/trello-icon.svg" alt="brand logo"></Image>
-        {/* <Text fontWeight="bold" fontSize="28px" m="4px">
-          Trello
-        </Text> */}
+        <Text fontWeight="bold" fontSize="28px" m="4px" color={'white'}>
+          ROOKS
+        </Text>
       </Box>
 
       <Flex
@@ -177,6 +176,11 @@ const Login = () => {
                 color="white"
                 onClick={loginUser}
                 isLoading={isFetching}
+                bgGradient="linear(to-r, red.400,pink.400)"
+                _hover={{
+                  bgGradient: 'linear(to-r, red.400,pink.400)',
+                  boxShadow: 'xl'
+                }}
                 loadingText="Logging">
                 Sign In
               </Button>
@@ -190,7 +194,7 @@ const Login = () => {
           </Box>
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 
