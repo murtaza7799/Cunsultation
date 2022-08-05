@@ -90,3 +90,17 @@ export default function InsertCheckBox({ inputList, setInputList }) {
     </div>
   );
 }
+export const getBase64Image = (url) => {
+  const img = new Image();
+  img.setAttribute('crossOrigin', 'anonymous');
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    const dataURL = canvas.toDataURL(url);
+    console.log(dataURL);
+  };
+  img.src = url;
+};

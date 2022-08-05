@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
-import InsertCheckBox from './DynamicCheckbox';
+import InsertCheckBox, { getBase64Image } from './DynamicCheckbox';
 import BlotFormatter from 'quill-blot-formatter';
 
 const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, images }) => {
@@ -98,7 +98,28 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
       // const source = <img src="img_5terre.jpg" alt="Cinque Terre" width="600" height="400" />;
       // console.log(source);
       // quill.insertText(finalPosition, 'image', source);
-      quill.insertEmbed(finalPosition, 'image', url, 'user');
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'blob';
+      xhr.onload = function (e) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          const res = event.target.result;
+          console.log(res);
+          if (typeof res === 'string') {
+            console.log('string');
+            quill.insertText(finalPosition, res);
+          }
+        };
+        const file = this.response;
+        reader.readAsDataURL(file);
+      };
+      xhr.send();
+      console.log('xhr', xhr);
+      // const imageurl = getBase64Image(url);
+      // console.log('imageurl');
+      // console.log(imageurl);
+      // quill.insertEmbed(finalPosition, 'image', url, 'user');
     }
   };
   const imageSketches = () => {
