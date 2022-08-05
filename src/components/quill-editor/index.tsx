@@ -17,6 +17,7 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
 import InsertCheckBox, { getBase64Image } from './DynamicCheckbox';
 import BlotFormatter from 'quill-blot-formatter';
+import LocalImages from './images';
 
 const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, images }) => {
   // const [url, setUrl] = React.useState([]);
@@ -87,6 +88,19 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
     // eslint-disable-next-line react/no-unescaped-entities
     return <span>Browser doesn't support speech recognition.</span>;
   }
+  function toDataURL(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+      };
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+  }
   const handleClick = (url) => {
     console.log(url);
     if (quill) {
@@ -94,32 +108,11 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
       const position = range ? range.index : 0;
       console.log('position ' + position);
       const finalPosition = position;
-      // eslint-disable-next-line jsx-a11y/img-redundant-alt
-      // const source = <img src="img_5terre.jpg" alt="Cinque Terre" width="600" height="400" />;
-      // console.log(source);
-      // quill.insertText(finalPosition, 'image', source);
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'blob';
-      xhr.onload = function (e) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          const res = event.target.result;
-          console.log(res);
-          if (typeof res === 'string') {
-            console.log('string');
-            quill.insertText(finalPosition, res);
-          }
-        };
-        const file = this.response;
-        reader.readAsDataURL(file);
-      };
-      xhr.send();
-      console.log('xhr', xhr);
-      // const imageurl = getBase64Image(url);
-      // console.log('imageurl');
-      // console.log(imageurl);
-      // quill.insertEmbed(finalPosition, 'image', url, 'user');
+      // });
+      toDataURL(url, function (dataUrl) {
+        console.log('RESULT:', dataUrl);
+        quill.insertEmbed(finalPosition, 'image', dataUrl);
+      });
     }
   };
   const imageSketches = () => {
@@ -129,14 +122,14 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
           Insert Sketch
         </MenuButton>
         <MenuList zIndex="dropdown" maxHeight={'60vh'} overflowY={'scroll'}>
-          {images.map((user, index) => (
-            <MenuItem key={index}>
+          {LocalImages.map((data) => (
+            <MenuItem key={data.id}>
               <Image
                 objectFit="cover"
                 boxSize="200px"
-                src={user}
-                alt="Segun Adebayo"
-                onClick={() => handleClick(user)}
+                src={data.image}
+                alt="loading....."
+                onClick={() => handleClick(data.image)}
               />
             </MenuItem>
           ))}
@@ -156,7 +149,7 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
           {/* {images !== undefined && imageSketches()} */}
           {imageSketches()}
           <br />
-          {/* <InsertCheckBox inputList={inputList} setInputList={setInputList} /> */}
+          <InsertCheckBox inputList={inputList} setInputList={setInputList} />
         </Box>
         <IconButton
           spinner={listening}

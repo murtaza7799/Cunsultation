@@ -30,9 +30,13 @@ import FileSaver, { saveAs } from 'file-saver';
 // import * as quillToWord from 'quill-to-word';
 // import { handelPDFConverter } from './sharing';
 const quillToWord = typeof window === 'object' ? require('quill-to-word') : () => false;
-import { pdfExporter } from 'quill-to-pdf';
+// import { pdfExporter } from 'quill-to-pdf';
 import { useReactToPrint } from 'react-to-print';
 // const pdfExporter = typeof window === 'object' ? require('quill-to-pdf') : () => false;
+import dynamic from 'next/dynamic';
+// const QuillPDF = dynamic(() => import('./quillToPDF'), {
+//   ssr: false
+// });
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -61,6 +65,8 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   };
   // console.log('questions', questions);
 
+  // const DynamicComponentWithNoSSR = dynamic(() => import('quill-to-pdf'), { ssr: false });
+
   const handleModalClose = async () => {
     const data = {
       _id: card._id,
@@ -78,36 +84,53 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     onClose();
   };
 
-  // const saveAsWord = async () => {
-  //   console.log('saveAsWord');
-  //   try {
-  //     const data = await quillToWord.generateWord(qilldata, {
-  //       exportAs: 'blob'
-  //     });
-  //     await saveAs(data, title);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // const saveAsPdf = async () => {
-  //   import('quill-to-pdf')
-  //     .then((module) => {
-  //       console.log('quill-to-pdf');
-  //       module.pdfExporter
-  //         .generatePdf(qilldata)
-  //         .then((data) => {
-  //           console.log('data');
-  //           console.log(data);
-  //           saveAs(data, title);
-  //         })
-  //         .catch((error) => {
-  //           console.log(error);
-  //         });
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // };
+  const saveAsWord = async () => {
+    console.log('saveAsWord');
+    try {
+      const data = await quillToWord.generateWord(qilldata, {
+        exportAs: 'blob'
+      });
+      await saveAs(data, title);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const saveAsPdf = async () => {
+    console.log('saveAsPdf');
+    console.log(qilldata);
+    // if (typeof window !== 'undefined') {
+    //   console.log('saveAsPdf');
+    //   try {
+    //     const data = await pdfExporter.generatePdf(qilldata);
+    //     await saveAs(data, title);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // }
+    // try {
+    //   if (typeof window !== 'undefined') {
+    //     import('quill-to-pdf')
+    //       .then((module) => {
+    //         console.log('quill-to-pdf');
+    //         module.pdfExporter
+    //           .generatePdf(qilldata)
+    //           .then((data) => {
+    //             console.log('data');
+    //             console.log(data);
+    //             saveAs(data, title);
+    //           })
+    //           .catch((error) => {
+    //             console.log(error);
+    //           });
+    //       })
+    //       .catch((error) => {
+    //         console.log(error);
+    //       });
+    //   }
+    // } catch (error) {
+    //   console.log(error);
+    // }
+  };
   const handlePrint = useReactToPrint({
     content: () => stringToHTML(description)
   });
@@ -116,44 +139,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     const doc = parser.parseFromString(str, 'text/html');
     return doc.body;
   };
-  function validateXML(txt) {
-    // Mozilla, Firefox, Opera, newer IE and Edge, etc.
-    // if (document.implementation.createDocument) {
-    //   console.log('Before creating domparser');
-    //   const parser = new DOMParser();
-    //   try {
-    //     var xmlDoc = parser.parseFromString(txt, 'text/xml');
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    //   console.log(
-    //     'After DomParser instance. Errors: ' + xmlDoc.getElementsByTagName('parsererror').length
-    //   );
-    //   if (xmlDoc.getElementsByTagName('parsererror').length > 0) {
-    //     return xmlDoc.getElementsByTagName('parsererror')[0];
-    //   } else {
-    //     return 'No errors found';
-    //   }
-    // }
-    // code for older IE
-    // else if (window.ActiveXObject) {
-    //   var xmlDoc = new ActiveXObject('Microsoft.XMLDOM');
-    //   xmlDoc.async = 'false';
-    //   xmlDoc.loadXML(txt);
-    //   if (xmlDoc.parseError.errorCode != 0) {
-    //     txt = 'Error Code: ' + xmlDoc.parseError.errorCode + '\\n';
-    //     txt = txt + 'Error Reason: ' + xmlDoc.parseError.reason;
-    //     txt = txt + 'Error Line: ' + xmlDoc.parseError.line;
-    //     console.log('I work in Windows IE');
-    //     return txt;
-    //   } else {
-    //     return 'No errors found';
-    //   }
-    // } else {
-    //   return 'Your browser does not support XML validation';
-    // }
-  }
-
   const assignToMenu = () => {
     return (
       <Menu>
@@ -161,8 +146,8 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           Share
         </MenuButton>
         <MenuList>
-          {/* <MenuItem onClick={saveAsWord}>Save as Word</MenuItem> */}
-          {/* <MenuItem onClick={saveAsPdf}>Save as PDF</MenuItem> */}
+          {/* <QuillPDF quilldata={description} title={title} /> */}
+          <MenuItem onClick={saveAsWord}>Save as PDF</MenuItem>
           <MenuItem onClick={handlePrint}>Print</MenuItem>
           <MenuItem onClick={handlePrint}>Copy</MenuItem>
         </MenuList>
