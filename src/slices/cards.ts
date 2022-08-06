@@ -54,7 +54,7 @@ export const fetchCards = createAsyncThunk('cards/fetchCards', async (_obj, { ge
     });
     const data = [...arr.map((item) => item)];
     console.log('fetch cards');
-    console.log(data);
+    console.log(data[0]._id);
     return data;
   } catch (error) {
     console.log(error);

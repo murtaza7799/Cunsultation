@@ -14,7 +14,9 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Badge
+  Badge,
+  ModalCloseButton,
+  useDisclosure
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { CardDetail } from '@/src/types/cards';
@@ -25,18 +27,13 @@ import { GrTextAlignFull } from 'react-icons/gr';
 import CardLabel from '@/src/components/board/columns/modals/card-labels-menu';
 import QuillEditor from '@/src/components/quill-editor';
 import { AiOutlineDown } from 'react-icons/ai';
-import FileSaver, { saveAs } from 'file-saver';
-// import { pdfExporter } from 'quill-to-pdf';
-// import * as quillToWord from 'quill-to-word';
-// import { handelPDFConverter } from './sharing';
+import { saveAs } from 'file-saver';
 const quillToWord = typeof window === 'object' ? require('quill-to-word') : () => false;
-// import { pdfExporter } from 'quill-to-pdf';
-import { useReactToPrint } from 'react-to-print';
-// const pdfExporter = typeof window === 'object' ? require('quill-to-pdf') : () => false;
-import dynamic from 'next/dynamic';
-// const QuillPDF = dynamic(() => import('./quillToPDF'), {
-//   ssr: false
-// });
+import ReactToPrint, { useReactToPrint } from 'react-to-print';
+import Article from '@/src/components/article';
+import Link from 'next/link';
+import PDFDocument from './pdf';
+import { PDFViewer } from '@react-pdf/renderer';
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -56,6 +53,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   const [questions, setQuestions] = useState(card?.questions);
   const [inputList, setInputList] = React.useState([{ value: '', checked: false }]);
   // const [questionslist, setQuestionlist] = React.useState([{ value: '', checked: false }]);
+  // const generate = IndexPage;
 
   const handleCardDelete = async () => {
     await dispatch(deleteCard(card._id));
@@ -63,10 +61,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
 
     onClose();
   };
-  // console.log('questions', questions);
-
-  // const DynamicComponentWithNoSSR = dynamic(() => import('quill-to-pdf'), { ssr: false });
-
   const handleModalClose = async () => {
     const data = {
       _id: card._id,
@@ -95,42 +89,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       console.log(error);
     }
   };
-  const saveAsPdf = async () => {
-    console.log('saveAsPdf');
-    console.log(qilldata);
-    // if (typeof window !== 'undefined') {
-    //   console.log('saveAsPdf');
-    //   try {
-    //     const data = await pdfExporter.generatePdf(qilldata);
-    //     await saveAs(data, title);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // }
-    // try {
-    //   if (typeof window !== 'undefined') {
-    //     import('quill-to-pdf')
-    //       .then((module) => {
-    //         console.log('quill-to-pdf');
-    //         module.pdfExporter
-    //           .generatePdf(qilldata)
-    //           .then((data) => {
-    //             console.log('data');
-    //             console.log(data);
-    //             saveAs(data, title);
-    //           })
-    //           .catch((error) => {
-    //             console.log(error);
-    //           });
-    //       })
-    //       .catch((error) => {
-    //         console.log(error);
-    //       });
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
-  };
   const handlePrint = useReactToPrint({
     content: () => stringToHTML(description)
   });
@@ -146,12 +104,31 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           Share
         </MenuButton>
         <MenuList>
-          {/* <QuillPDF quilldata={description} title={title} /> */}
-          <MenuItem onClick={saveAsWord}>Save as PDF</MenuItem>
+          <MenuItem onClick={saveAsWord}>Save as Word</MenuItem>
+          {renderDocument()}
           <MenuItem onClick={handlePrint}>Print</MenuItem>
           <MenuItem onClick={handlePrint}>Copy</MenuItem>
         </MenuList>
       </Menu>
+    );
+  };
+
+  const renderDocument = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
+
+    return (
+      <Box>
+        <MenuItem onClick={onOpen}>Save as PDF</MenuItem>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior={'inside'}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalCloseButton />
+            <ModalBody>
+              <PDFDocument description={description} />
+            </ModalBody>
+          </ModalContent>
+        </Modal>
+      </Box>
     );
   };
 
@@ -236,5 +213,16 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     </>
   );
 };
-
+// export class Page extends React.Component {
+//   static async getInitialProps(ctx) {
+//     console.log('getInitialProps Page');
+//     // const res = await fetch('https://api.github.com/repos/vercel/next.js');
+//     // const json = await res.json();
+//     // return { stars: json.stargazers_count };
+//     return ctx;
+//   }
+//   render(): React.ReactNode {
+//     return <div>TESTETS</div>;
+//   }
+// }
 export default CardDetailsModal;

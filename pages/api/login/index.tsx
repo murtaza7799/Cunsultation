@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .signIn(email, password)
       .then((userCredential) => {
         const claim = { id: userCredential.user.uid, email: userCredential.user.email };
-        const token = sign({ user: claim }, KEY, { expiresIn: '1h' });
+        const token = sign({ user: claim }, KEY, { expiresIn: '24h' });
         res.setHeader(
           'Set-Cookie',
           serialize('token', token, {
