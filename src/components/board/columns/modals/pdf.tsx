@@ -5,7 +5,7 @@ const print = () => {
   const pdf = new jsPDF('p', 'pt', 'a4');
   pdf.html(document.getElementById('content'), {
     callback: function (doc) {
-      doc.save('test.pdf');
+      doc.save('document.pdf');
     }
   });
 };
