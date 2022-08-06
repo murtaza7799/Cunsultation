@@ -25,7 +25,7 @@ const PDFDocument = ({ description }) => {
           onClick={() => {
             print();
           }}>
-          print
+          Save
         </Button>
       </Flex>
     </Box>
