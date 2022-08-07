@@ -24,8 +24,9 @@ const WelcomeScreen = (): JSX.Element => {
             <Text
               fontSize={['40px', '40px', '50px', '50px']}
               fontWeight="bold"
+              colorScheme={'red'}
               lineHeight="50px"
-              color={'white'}>
+              color={'red.600'}>
               We helps teams move work forward.
             </Text>
             <Text

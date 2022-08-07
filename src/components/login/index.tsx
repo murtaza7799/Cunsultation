@@ -28,7 +28,6 @@ const Login = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [hasError, setErrorState] = useState(false);
 
-  const host = checkEnvironment();
   const router = useRouter();
 
   const loginUser = async (e) => {
@@ -104,8 +103,8 @@ const Login = () => {
 
   return (
     <Box>
-      <Box display="flex" justifyContent="center" alignItems="center" my="40px">
-        <Text fontWeight="bold" fontSize="28px" m="4px" color={'white'}>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Text fontWeight="bold" fontSize="28px" m="50px" color={'white'}>
           ROOKS
         </Text>
       </Box>

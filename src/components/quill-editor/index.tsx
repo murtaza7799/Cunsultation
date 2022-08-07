@@ -2,29 +2,45 @@ import { useQuill } from 'react-quilljs';
 import React from 'react';
 import 'quill/dist/quill.snow.css';
 import {
+  Avatar,
   Box,
   Button,
   IconButton,
   Image,
+  keyframes,
   Menu,
   MenuButton,
   MenuItem,
   MenuList
 } from '@chakra-ui/react';
-import { useSpeechRecognition } from 'react-speech-recognition';
+import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
 import InsertCheckBox from './DynamicCheckbox';
 import LocalImages from './images';
 
 const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, quillText }) => {
+  const pulseRing = keyframes`
+	0% {
+    transform: scale(0.33);
+  }
+  40%,
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+	`;
   const {
+    transcript,
+    interimTranscript,
     finalTranscript,
-    listening,
     resetTranscript,
+    listening,
     browserSupportsSpeechRecognition,
-    SpeechRecognition
+    browserSupportsContinuousListening,
+    isMicrophoneAvailable
   } = useSpeechRecognition();
-  // if (typeof window !== 'undefined')
   const { quill, quillRef, Quill } = useQuill();
   React.useEffect(() => {
     if (quill) {
@@ -59,14 +75,14 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, q
     }
   }, [quill]);
   const listen = () => {
-    if (SpeechRecognition.browserSupportsContinuousListening) {
+    if (browserSupportsContinuousListening && isMicrophoneAvailable) {
       if (!listening) {
         SpeechRecognition.startListening({ continuous: true });
       }
     }
   };
   const stop = () => {
-    if (SpeechRecognition.browserSupportsContinuousListening) {
+    if (browserSupportsContinuousListening) {
       if (listening) {
         SpeechRecognition.stopListening();
         resetTranscript();
@@ -125,7 +141,6 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, q
       </Menu>
     );
   };
-
   return (
     <Box mx={'auto'}>
       <Box className="text-editor" width="95%">
@@ -143,9 +158,10 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, q
           variant="outline"
           display={'flex'}
           marginLeft={'10%'}
+          bg="teal.100"
           size="lg"
           isRound={true}
-          _hover={{ bg: 'teal.100' }}
+          _hover={{ bg: 'teal.300' }}
           loadingText="Submitting"
           colorScheme={listening ? 'red' : 'teal'}
           aria-label="Call Sage"
@@ -153,6 +169,26 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, q
           icon={listening ? <AiOutlineAudio /> : <AiOutlineAudioMuted />}
           onClick={listening ? stop : listen}
         />
+        {listening ? (
+          <Box
+            as="div"
+            margin={'15px'}
+            w={'15px'}
+            h={'15px'}
+            _before={{
+              content: "''",
+              position: 'relative',
+              display: 'block',
+              width: '300%',
+              height: '300%',
+              boxSizing: 'border-box',
+              marginLeft: '-100%',
+              marginTop: '-100%',
+              borderRadius: '50%',
+              bgColor: 'red',
+              animation: `2.25s ${pulseRing} cubic-bezier(0.455, 0.03, 0.515, 0.955) -0.4s infinite`
+            }}></Box>
+        ) : null}
       </Box>
     </Box>
   );
