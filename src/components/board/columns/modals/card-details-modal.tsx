@@ -16,7 +16,8 @@ import {
   MenuList,
   Badge,
   ModalCloseButton,
-  useDisclosure
+  useDisclosure,
+  useToast
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { CardDetail } from '@/src/types/cards';
@@ -29,11 +30,8 @@ import QuillEditor from '@/src/components/quill-editor';
 import { AiOutlineDown } from 'react-icons/ai';
 import { saveAs } from 'file-saver';
 const quillToWord = typeof window === 'object' ? require('quill-to-word') : () => false;
-import ReactToPrint, { useReactToPrint } from 'react-to-print';
-import Article from '@/src/components/article';
-import Link from 'next/link';
+import { useReactToPrint } from 'react-to-print';
 import PDFDocument from './pdf';
-import { PDFViewer } from '@react-pdf/renderer';
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -45,16 +43,16 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   const [title, setTitle] = useState(card?.title);
   const [images, setImages] = useState(card?.images);
   const [description, setDescription] = useState(card?.description);
-
   const [qilldata, setQillData] = useState();
   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
   const cardDelete = useAppSelector((state) => state.cards.isDeleting);
   // const cardQuestions = card?.questions;
   const [questions, setQuestions] = useState(card?.questions);
   const [inputList, setInputList] = React.useState([{ value: '', checked: false }]);
+  const [quillText, setQuillText] = React.useState('');
   // const [questionslist, setQuestionlist] = React.useState([{ value: '', checked: false }]);
   // const generate = IndexPage;
-
+  const toast = useToast();
   const handleCardDelete = async () => {
     await dispatch(deleteCard(card._id));
     await dispatch(fetchCards());
@@ -76,8 +74,19 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     onClose();
   };
 
+  const copyQuillText = () => {
+    const text = quillText;
+    navigator.clipboard.writeText(text);
+    toast({
+      position: 'bottom',
+      description: 'Copy to Clipboard',
+      status: 'success',
+      duration: 2500,
+      isClosable: true
+    });
+  };
+
   const saveAsWord = async () => {
-    console.log('saveAsWord');
     try {
       const data = await quillToWord.generateWord(qilldata, {
         exportAs: 'blob'
@@ -105,7 +114,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           <MenuItem onClick={saveAsWord}>Save as Word</MenuItem>
           {renderDocument()}
           <MenuItem onClick={handlePrint}>Print</MenuItem>
-          <MenuItem onClick={handlePrint}>Copy</MenuItem>
+          <MenuItem onClick={copyQuillText}>Copy</MenuItem>
         </MenuList>
       </Menu>
     );
@@ -173,6 +182,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                     inputList={inputList}
                     setInputList={setInputList}
                     images={images}
+                    quillText={setQuillText}
                   />
                 </Box>
               </Box>
@@ -211,16 +221,4 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     </>
   );
 };
-// export class Page extends React.Component {
-//   static async getInitialProps(ctx) {
-//     console.log('getInitialProps Page');
-//     // const res = await fetch('https://api.github.com/repos/vercel/next.js');
-//     // const json = await res.json();
-//     // return { stars: json.stargazers_count };
-//     return ctx;
-//   }
-//   render(): React.ReactNode {
-//     return <div>TESTETS</div>;
-//   }
-// }
 export default CardDetailsModal;

@@ -19,7 +19,15 @@ import InsertCheckBox, { getBase64Image } from './DynamicCheckbox';
 import BlotFormatter from 'quill-blot-formatter';
 import LocalImages from './images';
 
-const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, images }) => {
+const QuillEditor = ({
+  value,
+  onChange,
+  quillContent,
+  inputList,
+  setInputList,
+  images,
+  quillText
+}) => {
   const {
     finalTranscript,
     listening,
@@ -33,6 +41,8 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML(value);
       quillContent(quill.getContents());
+      quillText(quill.getText());
+      console.log('Text', quill.getText());
     }
   }, [quill]);
   React.useEffect(() => {
@@ -54,7 +64,7 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
     if (quill) {
       quill.on('text-change', (delta, oldDelta, source) => {
         quillContent(quill.getContents());
-
+        quillText(quill.getText());
         changeText(quill.root.innerHTML);
       });
     }
