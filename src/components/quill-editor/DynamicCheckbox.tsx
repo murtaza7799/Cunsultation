@@ -4,7 +4,6 @@ import { Box, Button, Checkbox, CheckboxGroup, Input, Stack } from '@chakra-ui/r
 import styles from './checkbox.module.scss';
 export default function InsertCheckBox({ inputList, setInputList }) {
   // handle input change
-  console.log('inputlist at chck box', inputList);
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
     console.log(name, value);

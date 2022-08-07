@@ -7,8 +7,6 @@ const WelcomeScreenWithStoreWithStore = withStore(WelcomeScreen);
 // const WelcomeScreenWithStore = withAuth(WelcomeScreenWithStoreWithStore);
 WelcomeScreenWithStoreWithStore.getInitialProps = async (ctx) => {
   const reduxStore = setOrGetStore();
-  console.log('getInitialProps with welcome screen');
-  console.log('ctx', ctx);
   const userDetails = isValidUser(ctx);
 
   if (userDetails && userDetails.isValid) {

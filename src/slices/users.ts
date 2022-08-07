@@ -15,7 +15,7 @@ export const fetchUsers = createAsyncThunk('users/fetchUsers', async (obj, { get
   const { board } = getState() as { board: BoardSlice };
   let users = board.board.users;
   const createdBy = board.board.createdBy;
-  console.log('fetchUsers CreatedBy ' + createdBy);
+  // console.log('fetchUsers CreatedBy ' + createdBy);
   users = [...users, createdBy];
   let userPromise = [];
   for (let i = 0; i < users.length; i++) {

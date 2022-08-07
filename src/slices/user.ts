@@ -45,8 +45,6 @@ export const fetchUser = createAsyncThunk('users/fetchUser', async (_obj, { getS
       // doc.data() is never undefined for query doc snapshots
       // console.log(doc.id, ' => ', doc.data());
     });
-    console.log('fech user Test data new ');
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error);
@@ -66,27 +64,21 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     updateUserData: (state, { payload }) => {
-      console.log('updateUserData');
-      console.log(payload);
-      console.log(state.id);
       state[payload.type] = payload.value;
     },
     resetUserData: () => initialState
   },
   extraReducers: {
     [fetchUser.pending.toString()]: (state) => {
-      console.log('fecshuser pending');
       state.status = 'pending';
     },
     [fetchUser.fulfilled.toString()]: (state, { payload }) => {
       state.status = 'success';
       state.id = payload && payload._id;
-      state.email = 'murtaza';
+      state.email = payload && payload.email;
       state.fullName = payload && payload.fullName;
-      console.log('state.fullName ' + state.fullName);
     },
     [fetchUser.rejected.toString()]: (state, { payload }) => {
-      console.log('fecshuser rejected');
       state.status = 'failed';
       state.error = payload && payload.error;
       state.message = payload && payload.message;

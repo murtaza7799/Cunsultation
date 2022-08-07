@@ -20,8 +20,6 @@ import BlotFormatter from 'quill-blot-formatter';
 import LocalImages from './images';
 
 const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, images }) => {
-  // const [url, setUrl] = React.useState([]);
-  // console.log('images', images);
   const {
     finalTranscript,
     listening,
@@ -31,10 +29,6 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
   } = useSpeechRecognition();
   // if (typeof window !== 'undefined')
   const { quill, quillRef, Quill } = useQuill();
-  if (typeof window === 'object') {
-    console.log('unsupported');
-    // if (Quill && !quill) Quill.register('modules/blotFormatter', BlotFormatter);
-  }
   React.useEffect(() => {
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML(value);
@@ -55,12 +49,10 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
 
   function changeText(text) {
     onChange(text);
-    console.log(value);
   }
   React.useEffect(() => {
     if (quill) {
       quill.on('text-change', (delta, oldDelta, source) => {
-        console.log('content changed');
         quillContent(quill.getContents());
 
         changeText(quill.root.innerHTML);
@@ -70,7 +62,6 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
   const listen = () => {
     if (SpeechRecognition.browserSupportsContinuousListening) {
       if (!listening) {
-        console.log('listening');
         SpeechRecognition.startListening({ continuous: true });
       }
     }
@@ -102,7 +93,6 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
     xhr.send();
   }
   const handleClick = (url) => {
-    console.log(url);
     if (quill) {
       const range = quill?.getSelection();
       const position = range ? range.index : 0;
@@ -110,7 +100,6 @@ const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, i
       const finalPosition = position;
       // });
       toDataURL(url, function (dataUrl) {
-        console.log('RESULT:', dataUrl);
         quill.insertEmbed(finalPosition, 'image', dataUrl);
       });
     }

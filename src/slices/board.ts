@@ -39,7 +39,7 @@ export const saveBoard = createAsyncThunk('board/save', async (obj, { getState }
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      console.log(doc.id, ' => ', data);
+      // console.log(doc.id, ' => ', data);
       if (data._id === board.board._id) {
         getId.id = doc.id;
       }
@@ -95,7 +95,7 @@ export const deleteBoard = createAsyncThunk('board/delete', async (obj, { getSta
     const querySnapshot = await getDocs(q);
     querySnapshot.forEach((doc) => {
       const data = doc.data();
-      console.log(doc.id, ' => ', data);
+      // console.log(doc.id, ' => ', data);
       if (data._id === _id) {
         getId.id = doc.id;
       }

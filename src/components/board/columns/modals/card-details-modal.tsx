@@ -69,8 +69,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       columnId: card.columnId,
       questions: inputList
     };
-    // console.log('description');
-    console.log(description);
 
     await dispatch(updateCard(data));
     await dispatch(fetchCards());

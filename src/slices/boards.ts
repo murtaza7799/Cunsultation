@@ -47,7 +47,6 @@ export const createBoard = createAsyncThunk('board/create', async (_obj, { getSt
       createdBy: user.id,
       backgroundImage: '/boards/board-background.jpg'
     });
-    console.log('Document written with ID: ', docRef.id);
     return docRef;
   } catch (e) {
     return e;

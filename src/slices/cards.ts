@@ -53,8 +53,8 @@ export const fetchCards = createAsyncThunk('cards/fetchCards', async (_obj, { ge
       // console.log(doc.id, ' => ', doc.data());
     });
     const data = [...arr.map((item) => item)];
-    console.log('fetch cards');
-    console.log(data[0]._id);
+    // console.log('fetch cards');
+    // console.log(data[0]._id);
     return data;
   } catch (error) {
     console.log(error);
@@ -189,7 +189,7 @@ export const updateCardSequence = createAsyncThunk(
     //   columnId,
     //   sequence
     // };
-    console.log('update card sequence');
+    // console.log('update card sequence');
     const getId = {
       id: null
     };

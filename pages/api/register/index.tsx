@@ -3,22 +3,12 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '@/util/firebase';
 import { addDoc, collection } from 'firebase/firestore';
 
-// const isUserExists = async (db, email) => {
-//   const user = await db.collection('users').find({ email: email }).toArray();
-
-//   if (user.length > 0) {
-//     return true;
-//   }
-
-//   return false;
-// };
 const addUserDetails = async (id, email, fullName) => {
   const docRef = await addDoc(collection(db, 'Users'), {
     _id: id,
     fullName: fullName,
     email: email
   });
-  console.log('Document written with ID: ', docRef.id);
 
   if (docRef) return true;
 };
