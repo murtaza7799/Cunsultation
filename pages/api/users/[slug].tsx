@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           // console.log(data);
           res.send(data);
         } catch (error) {
-          console.log(error);
+          // console.log(error);
           return error;
         }
 

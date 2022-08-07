@@ -41,17 +41,19 @@ type Props = {
 const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   const dispatch = useDispatch();
   const [title, setTitle] = useState(card?.title);
-  const [images, setImages] = useState(card?.images);
   const [description, setDescription] = useState(card?.description);
   const [qilldata, setQillData] = useState();
   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
   const cardDelete = useAppSelector((state) => state.cards.isDeleting);
-  // const cardQuestions = card?.questions;
-  const [questions, setQuestions] = useState(card?.questions);
-  const [inputList, setInputList] = React.useState([{ value: '', checked: false }]);
+  const [inputList, setInputList] = React.useState(
+    card?.questions?.map((question) => {
+      return {
+        value: question.value,
+        checked: question.checked
+      };
+    })
+  );
   const [quillText, setQuillText] = React.useState('');
-  // const [questionslist, setQuestionlist] = React.useState([{ value: '', checked: false }]);
-  // const generate = IndexPage;
   const toast = useToast();
   const handleCardDelete = async () => {
     await dispatch(deleteCard(card._id));
@@ -181,7 +183,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                     quillContent={setQillData}
                     inputList={inputList}
                     setInputList={setInputList}
-                    images={images}
                     quillText={setQuillText}
                   />
                 </Box>

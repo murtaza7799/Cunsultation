@@ -79,7 +79,7 @@ const SignUp = (): JSX.Element => {
     setIsCreatingStatus(true);
 
     const id = shortId.generate();
-    console.log('register user');
+    // console.log('register user');
 
     const { email, password, confirmPassword, fullName } = values;
 

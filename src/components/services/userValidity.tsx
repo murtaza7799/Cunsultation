@@ -13,7 +13,7 @@ function getCurrentUser(auth) {
 const isUserAuth = async () => {
   const check = await getCurrentUser(auth);
   if (check !== null) {
-    console.log('User Already Successful check at validity', check);
+    // console.log('User Already Successful check at validity', check);
     return check;
   }
   return null;

@@ -48,7 +48,7 @@ const SubNavbar = (): JSX.Element => {
       <Heading ml="0.5rem" color="white" as="h4" size="sm" whiteSpace="nowrap" d="block">
         {board?.name}
       </Heading>
-      <Box>{loadBoardUsers()}</Box>
+      {/* <Box>{loadBoardUsers()}</Box> */}
       <Box>
         {/* <InviteModal /> */}
         <BoardSettings />

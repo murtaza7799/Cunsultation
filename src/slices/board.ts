@@ -73,7 +73,7 @@ export const fetchBoard = createAsyncThunk('board/get', async (slug: string) => 
       data.createdBy = check.createdBy;
       data.backgroundImage = check.backgroundImage;
     });
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.log(error);

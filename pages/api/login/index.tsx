@@ -31,8 +31,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.send({ message: 'success', token, id: userCredential.user.uid, status: 200 });
       })
       .catch((err) => {
-        console.log('login error', err);
-        res.status(404).send({ error: 'Invalid username or password' });
+        // console.log('login error', err);
+        res.status(404).send({ err: 'Invalid username or password' });
       });
   }
 }

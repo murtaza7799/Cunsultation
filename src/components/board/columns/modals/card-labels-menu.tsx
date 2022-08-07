@@ -22,24 +22,16 @@ type IProps = {
 
 const cardLabels = [
   {
-    type: 'performance',
-    bg: '#0079bf'
-  },
-  {
-    type: 'bug',
-    bg: '#eb5a46'
-  },
-  {
-    type: 'feature',
+    type: 'Completed',
     bg: '#61bd4f'
   },
   {
-    type: 'information',
-    bg: '#ff9f1a'
+    type: 'Session Continued',
+    bg: '#f2d600'
   },
   {
-    type: 'warning',
-    bg: '#f2d600'
+    type: 'InComplete',
+    bg: '#eb5a46'
   }
 ];
 

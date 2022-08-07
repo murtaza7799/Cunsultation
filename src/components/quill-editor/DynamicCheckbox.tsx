@@ -1,16 +1,13 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Box, Button, Checkbox, CheckboxGroup, Input, Stack } from '@chakra-ui/react';
+import React from 'react';
+import { Box, Button, Checkbox, Input } from '@chakra-ui/react';
 import styles from './checkbox.module.scss';
 export default function InsertCheckBox({ inputList, setInputList }) {
   // handle input change
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
-    console.log(name, value);
 
     const list = [...inputList];
     list[index][name] = value;
-    console.log(list);
     setInputList(list);
   };
 
@@ -27,7 +24,6 @@ export default function InsertCheckBox({ inputList, setInputList }) {
     const list = [...inputList];
     list.splice(index, 1);
     setInputList(list);
-    console.log();
     // department(list, values);
   };
 
@@ -57,7 +53,7 @@ export default function InsertCheckBox({ inputList, setInputList }) {
 
               <br />
               <Box display={'flex'} marginRig={5}>
-                <section title=".squaredTwo">
+                <section title="CheckBox">
                   <div className={styles.squaredTwo}>
                     <Checkbox
                       mr={5}
@@ -99,7 +95,6 @@ export const getBase64Image = (url) => {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(img, 0, 0);
     const dataURL = canvas.toDataURL(url);
-    console.log(dataURL);
   };
   img.src = url;
 };

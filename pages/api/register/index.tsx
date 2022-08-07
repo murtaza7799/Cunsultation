@@ -29,8 +29,8 @@ const createUser = async (body, res) => {
     })
     .catch((error) => {
       const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log('error', errorCode, errorMessage);
+      // const errorMessage = error.message;
+      // console.log('error', errorCode, errorMessage);
       const data = {
         message: errorCode
       };

@@ -1,8 +1,8 @@
 import React, { FC } from 'react';
-import { Box, Badge, Avatar } from '@chakra-ui/react';
+import { Box, Badge } from '@chakra-ui/react';
 import { Draggable } from 'react-beautiful-dnd';
 import { CardDetail } from '@/src/types/cards';
-import { useAppSelector } from '@/src/hooks';
+// import { useAppSelector } from '@/src/hooks';
 
 type Props = {
   showCardDetail: (cardId: string) => void;
@@ -11,19 +11,19 @@ type Props = {
 };
 
 const Card: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
-  const users = useAppSelector((state) => state.users.users);
+  // const users = useAppSelector((state) => state.users.users);
 
-  const loadAssignedToUser = () => {
-    if (!card.assignedTo) return;
+  // const loadAssignedToUser = () => {
+  //   if (!card.assignedTo) return;
 
-    const user = users.filter((user) => user._id === card.assignedTo);
+  //   const user = users.filter((user) => user._id === card.assignedTo);
 
-    return (
-      <Box display="flex" justifyContent="flex-end">
-        <Avatar size="xs" name={user[0]?.fullName} />
-      </Box>
-    );
-  };
+  //   return (
+  //     <Box display="flex" justifyContent="flex-end">
+  //       <Avatar size="xs" name={user[0]?.fullName} />
+  //     </Box>
+  //   );
+  // };
 
   return (
     // https://github.com/atlassian/react-beautiful-dnd/issues/1767
@@ -47,12 +47,12 @@ const Card: FC<Props> = ({ cardIndex, showCardDetail, card }) => {
           }}
           onClick={() => showCardDetail(card._id)}>
           {card.label && (
-            <Badge bg={card.label.type} color="white">
+            <Badge bg={card.label.bg} color="white">
               {card.label.type}
             </Badge>
           )}
           <p>{card.title}</p>
-          {loadAssignedToUser()}
+          {/* {loadAssignedToUser()} */}
         </Box>
       )}
     </Draggable>

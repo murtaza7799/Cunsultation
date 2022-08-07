@@ -9,25 +9,14 @@ import {
   Menu,
   MenuButton,
   MenuItem,
-  MenuList,
-  Stack,
-  Text
+  MenuList
 } from '@chakra-ui/react';
-import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { useSpeechRecognition } from 'react-speech-recognition';
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
-import InsertCheckBox, { getBase64Image } from './DynamicCheckbox';
-import BlotFormatter from 'quill-blot-formatter';
+import InsertCheckBox from './DynamicCheckbox';
 import LocalImages from './images';
 
-const QuillEditor = ({
-  value,
-  onChange,
-  quillContent,
-  inputList,
-  setInputList,
-  images,
-  quillText
-}) => {
+const QuillEditor = ({ value, onChange, quillContent, inputList, setInputList, quillText }) => {
   const {
     finalTranscript,
     listening,
@@ -42,7 +31,7 @@ const QuillEditor = ({
       quill.clipboard.dangerouslyPasteHTML(value);
       quillContent(quill.getContents());
       quillText(quill.getText());
-      console.log('Text', quill.getText());
+      // console.log('Text', quill.getText());
     }
   }, [quill]);
   React.useEffect(() => {
@@ -106,7 +95,7 @@ const QuillEditor = ({
     if (quill) {
       const range = quill?.getSelection();
       const position = range ? range.index : 0;
-      console.log('position ' + position);
+      // console.log('position ' + position);
       const finalPosition = position;
       // });
       toDataURL(url, function (dataUrl) {
@@ -145,7 +134,6 @@ const QuillEditor = ({
       <br></br>
       <Box display={'flex'}>
         <Box>
-          {/* {images !== undefined && imageSketches()} */}
           {imageSketches()}
           <br />
           <InsertCheckBox inputList={inputList} setInputList={setInputList} />
