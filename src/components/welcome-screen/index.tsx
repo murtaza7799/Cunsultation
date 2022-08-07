@@ -6,12 +6,11 @@ const WelcomeScreen = (): JSX.Element => {
   return (
     <>
       <Box
+        backdropFilter="blur(10px) hue-rotate(90deg)"
+        backdropBlur="200px"
         height="100vh"
         w={'full'}
         h={'100vh'}
-        backgroundImage={
-          'url(https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)'
-        }
         backgroundSize={'cover'}
         backgroundPosition={'center center'}>
         <NavBar />
@@ -22,21 +21,22 @@ const WelcomeScreen = (): JSX.Element => {
           p="4rem">
           <Box>
             <Text
-              fontSize={['40px', '40px', '50px', '50px']}
+              fontSize={['50px', '50px', '50px', '50px']}
               fontWeight="bold"
-              colorScheme={'red'}
+              colorScheme={'white.300'}
               lineHeight="50px"
-              color={'red.600'}>
-              We helps teams move work forward.
+              color={'white'}>
+              We helps People to move Forward.
             </Text>
             <Text
-              color={'white'}
               fontWeight={700}
               lineHeight={1.2}
+              color={'white'}
+              colorScheme={'red.100'}
               fontSize={['1rem', '1rem', '1.5rem', '1.5rem']}
               width={['100%', '100%', '50%', '50%']}>
-              Collaborate, manage projects, and reach new productivity peaks. From high rises to the
-              home office, the way your team works is unique - accomplish it all with our Platform.
+              Collaborate, manage patients, and reach new productivity peaks. From high rises to the
+              home, the way your people works is unique - accomplish it all with our Platform.
             </Text>
           </Box>
           <Box>
