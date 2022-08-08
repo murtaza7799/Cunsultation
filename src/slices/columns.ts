@@ -29,7 +29,6 @@ const host = checkEnvironment();
 
 export const fetchColumns = createAsyncThunk('columns/fetchColumns', async (_obj, { getState }) => {
   const { board } = getState() as { board: BoardSlice };
-  console.log('fech columns');
   const q = query(collection(db, 'columns'), where('boardId', '==', board.board._id));
   const arr = [];
   const querySnapshot = await getDocs(q);
@@ -41,7 +40,7 @@ export const fetchColumns = createAsyncThunk('columns/fetchColumns', async (_obj
       // console.log(doc.id, ' => ', doc.data());
     });
     const data = [...arr.map((item) => item)];
-    console.log(data);
+    // console.log(data);
     return data;
   } catch (error) {
     console.log(error);
@@ -66,26 +65,22 @@ export const deleteColumn = createAsyncThunk(
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        console.log(doc.id, ' => ', data);
+        // console.log(doc.id, ' => ', data);
         if (data._id === columnId) {
-          console.log('found COLUMN');
-          console.log(doc.id);
           getId.id = doc.id;
-          console.log(data);
+          // console.log(data);
         }
       });
-      console.log('data');
-      console.log(getId.id);
       if (getId.id !== null) {
-        console.log('deleting card');
-        const docRef = await deleteDoc(doc(db, 'cards', getId.id));
+        // console.log('deleting card');
+        const docRef = await deleteDoc(doc(db, 'columns', getId.id));
         return docRef;
       }
     } catch (error) {
       console.log(error);
     }
 
-    // const url = `${host}/api/boards/${board.board._id}/columns/${columnId}`;
+    // const url = `/api/boards/${board.board._id}/columns/${columnId}`;
 
     // const response = await fetch(url, {
     //   method: 'DELETE',
@@ -108,7 +103,7 @@ export const deleteColumn = createAsyncThunk(
 export const addColumnToBoard = createAsyncThunk(
   'column/add',
   async (columnId: string, { getState }) => {
-    console.log('add column to board');
+    // console.log('add column to board');
     const { board } = getState() as { board: BoardSlice };
     const { user } = getState() as { user: SingleUser };
     const { columns } = getState() as { columns: ColumnsSlice };
@@ -137,7 +132,7 @@ export const addColumnToBoard = createAsyncThunk(
         userId: user.id,
         sequence
       });
-      console.log('Document written with ID: ', docRef.id);
+      // console.log('Document written with ID: ', docRef.id);
       return docRef;
     } catch (e) {
       return e;
@@ -166,20 +161,18 @@ export const updateColumn = createAsyncThunk(
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        console.log(doc.id, ' => ', data);
+        // console.log(doc.id, ' => ', data);
         if (data._id === obj.columnId) {
-          console.log('found column');
-          console.log(doc.id);
+          // console.log('found column');
+          // console.log(doc.id);
           getId.id = doc.id;
-          console.log(data);
+          // console.log(data);
         }
       });
-      console.log('data');
-      console.log(getId.id);
+
       if (getId.id !== null) {
-        console.log('updating column');
         const docRef = await updateDoc(doc(db, 'columns', getId.id), data);
-        console.log('Document written with ID: ');
+
         return docRef;
       }
     } catch (error) {
@@ -211,7 +204,7 @@ export const updateColumnSequence = createAsyncThunk(
       const querySnapshot = await getDocs(q);
       querySnapshot.forEach((doc) => {
         const data = doc.data();
-        console.log(doc.id, ' => ', data);
+        // console.log(doc.id, ' => ', data);
         if (data._id === _id) {
           getId.id = doc.id;
         }

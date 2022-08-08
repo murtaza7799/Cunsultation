@@ -19,6 +19,6 @@
     "isolatedModules": true,
     "jsx": "preserve"
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/quill-editor/speachapi.jsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/components/quill-editor/speachapi.jsx", "pages/generatepdf.tsx", "lib/pdfHelper.jsx"],
   "exclude": ["node_modules"]
 }

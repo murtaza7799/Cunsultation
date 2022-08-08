@@ -12,12 +12,14 @@ import {
   AlertDescription,
   CloseButton,
   AlertTitle,
-  AlertIcon
+  AlertIcon,
+  Text
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import shortId from 'shortid';
-import checkEnvironment from '@/util/check-environment';
 import { useRouter } from 'next/router';
+import checkEnvironment from '@/util/check-environment';
+// import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 
 const SignUp = (): JSX.Element => {
   const [values, setValues] = useState({
@@ -61,13 +63,23 @@ const SignUp = (): JSX.Element => {
       isClosable: true
     });
   };
+  const errorToast = (error) => {
+    toast({
+      position: 'bottom',
+      title: 'Error in registering User.',
+      description: error,
+      status: 'error',
+      duration: 4500,
+      isClosable: true
+    });
+  };
 
   const registerUser = async (e) => {
     e.preventDefault();
     setIsCreatingStatus(true);
 
     const id = shortId.generate();
-    const host = checkEnvironment();
+    // console.log('register user');
 
     const { email, password, confirmPassword, fullName } = values;
 
@@ -78,8 +90,9 @@ const SignUp = (): JSX.Element => {
       confirmPassword: confirmPassword,
       fullName: fullName
     };
+    const host = checkEnvironment();
 
-    const url = `${host}/api/register`;
+    const url = `/api/register`;
 
     const response = await fetch(url, {
       method: 'POST',
@@ -98,7 +111,8 @@ const SignUp = (): JSX.Element => {
     setIsCreatingStatus(false);
 
     if (response.status === 404) {
-      setErrorState(true);
+      errorToast(result.message);
+      // setErrorState(true);
     }
 
     const { email: inviteEmail, token, boardId } = router.query;
@@ -157,19 +171,29 @@ const SignUp = (): JSX.Element => {
   };
 
   return (
-    <>
+    <Box
+      w={'full'}
+      h={'100vh'}
+      backgroundImage={
+        'url(https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)'
+      }
+      backgroundSize={'cover'}
+      backgroundPosition={'center center'}>
       <Box display="flex">
-        <Image
+        <Text
+          color={'white'}
+          fontSize="xl"
+          fontWeight="bold"
           height="30px"
           ml="auto"
           mr="auto"
-          my="40px"
-          src="/trello-logo.svg"
-          display="inline-block"
-          alt="brand logo"
-        />
+          my="40px">
+          ROOKS
+        </Text>
       </Box>
       <Flex
+        backdropFilter="auto"
+        bg="none"
         alignItems="center"
         flexDirection={['column', 'column', 'row', 'row']}
         justifyContent="center">
@@ -198,7 +222,7 @@ const SignUp = (): JSX.Element => {
           boxShadow="rgb(0 0 0 / 10%) 0 0 10px">
           <Box
             textAlign="center"
-            color="#5E6C84"
+            color="black"
             mt="5"
             mb="25"
             fontSize={['10px', '10px', '15px', '15px']}
@@ -256,6 +280,11 @@ const SignUp = (): JSX.Element => {
               color="white"
               onClick={registerUser}
               isLoading={isCreating}
+              bgGradient="linear(to-r, red.400,pink.400)"
+              _hover={{
+                bgGradient: 'linear(to-r, red.400,pink.400)',
+                boxShadow: 'xl'
+              }}
               loadingText="Registering">
               Sign up
             </Button>
@@ -268,7 +297,7 @@ const SignUp = (): JSX.Element => {
           </Box>
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 

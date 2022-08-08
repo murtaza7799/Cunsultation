@@ -18,7 +18,6 @@ import { useState } from 'react';
 import checkEnvironment from '@/util/check-environment';
 import { useRouter } from 'next/router';
 import inviteUser from '@/util/invite-user';
-import * as auth from '../../../pages/services/auth';
 
 const Login = () => {
   const [values, setValues] = useState({
@@ -29,7 +28,6 @@ const Login = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [hasError, setErrorState] = useState(false);
 
-  const host = checkEnvironment();
   const router = useRouter();
 
   const loginUser = async (e) => {
@@ -40,54 +38,41 @@ const Login = () => {
       email: values.email,
       password: values.password
     };
-    await auth
-      .signIn(values.email, values.password)
-      .then(() => {
-        console.log('login success');
+
+    const url = `/api/login`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+    setIsFetching(false);
+
+    const { email: inviteEmail, token, boardId } = router.query;
+    const isInvitedUser = inviteEmail && token && boardId;
+
+    if (isInvitedUser && result.message === 'success') {
+      const hasInvited = await inviteUser({ email: inviteEmail, boardId });
+
+      if (hasInvited) {
         window.location.href = `${window.location.origin}/boards`;
-      })
-      .catch((err) => {
-        console.log('login error', err);
-        setErrorState(true);
-      })
-      .finally(() => {
-        setIsFetching(false);
-      });
+      }
+    } else if (result.message === 'success') {
+      window.location.href = `${window.location.origin}/boards`;
+    }
 
-    // const url = `${host}/api/login`;
-
-    // const response = await fetch(url, {
-    //   method: 'POST',
-    //   mode: 'cors',
-    //   cache: 'no-cache',
-    //   credentials: 'same-origin',
-    //   headers: {
-    //     'Content-Type': 'application/json'
-    //   },
-    //   redirect: 'follow',
-    //   referrerPolicy: 'no-referrer',
-    //   body: JSON.stringify(data)
-    // });
-
-    // const result = await response.json();
-    // setIsFetching(false);
-
-    // const { email: inviteEmail, token, boardId } = router.query;
-    // const isInvitedUser = inviteEmail && token && boardId;
-
-    // if (isInvitedUser && result.message === 'success') {
-    //   const hasInvited = await inviteUser({ email: inviteEmail, boardId });
-
-    //   if (hasInvited) {
-    //     window.location.href = `${window.location.origin}/home`;
-    //   }
-    // } else if (result.message === 'success') {
-    //   window.location.href = `${window.location.origin}/home`;
-    // }
-
-    // if (response.status === 404) {
-    //   setErrorState(true);
-    // }
+    if (response.status === 404) {
+      setErrorState(true);
+    }
   };
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,11 +102,10 @@ const Login = () => {
   };
 
   return (
-    <>
-      <Box display="flex" justifyContent="center" alignItems="center" my="40px">
-        <Image height="20px" mt="2" src="/trello-icon.svg" alt="brand logo"></Image>
-        <Text fontWeight="bold" fontSize="28px" m="4px">
-          Trello
+    <Box>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Text fontWeight="bold" fontSize="28px" m="50px" color={'white'}>
+          ROOKS
         </Text>
       </Box>
 
@@ -160,7 +144,7 @@ const Login = () => {
             fontSize={['16px', '16px', '20px', '20px']}
             fontWeight="semibold"
             lineHeight="normal">
-            <h1>Log in to Trello</h1>
+            <h1>Log in to Your Account</h1>
           </Box>
           <Box my={4} textAlign="left">
             <form>
@@ -191,6 +175,11 @@ const Login = () => {
                 color="white"
                 onClick={loginUser}
                 isLoading={isFetching}
+                bgGradient="linear(to-r, red.400,pink.400)"
+                _hover={{
+                  bgGradient: 'linear(to-r, red.400,pink.400)',
+                  boxShadow: 'xl'
+                }}
                 loadingText="Logging">
                 Sign In
               </Button>
@@ -204,7 +193,7 @@ const Login = () => {
           </Box>
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 

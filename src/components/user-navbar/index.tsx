@@ -15,13 +15,35 @@ import PropTypes from 'prop-types';
 import { useAppSelector } from '@/src/hooks';
 import { AiOutlineHome } from 'react-icons/ai';
 import { SiTrello } from 'react-icons/si';
-import * as auth from '../../../pages/services/auth';
+import * as auth from '../services/auth';
+import checkEnvironment from '@/util/check-environment';
 
 const UserNavBar: FC = () => {
   const user = useAppSelector((state) => state.user);
 
   const logout = async () => {
     await auth.logout();
+
+    const url = `/api/logout`;
+
+    const response = await fetch(url, {
+      method: 'POST',
+      mode: 'cors',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: 'follow',
+      referrerPolicy: 'no-referrer',
+      body: JSON.stringify({})
+    });
+
+    const responseInJson = await response.json();
+
+    if (responseInJson.message === 'success') {
+      window.location.href = `${window.location.origin}/login`;
+    }
   };
 
   const renderButtons = () => {
@@ -58,12 +80,7 @@ const UserNavBar: FC = () => {
   };
 
   return (
-    <Box boxShadow="sm" bg="rgba(0,0,0,0.2)" display="flex">
-      {/* <Link href="/home">
-        <Button size="xs" ml="5px" my="5px">
-          <AiOutlineHome />
-        </Button>
-      </Link> */}
+    <Box boxShadow="sm" bg="rgba(0,0,0,0.2)" display="flex " borderWidth="1px">
       <Link href="/boards">
         <Button size="xs" ml="5px" mr="10px" my="5px">
           Boards
@@ -74,7 +91,7 @@ const UserNavBar: FC = () => {
         <SiTrello />
       </Box>
       <Text fontWeight="bold" fontSize="20px" mt="2px" color="white">
-        website
+        ROOKS
       </Text>
       <Spacer />
       {renderButtons()}

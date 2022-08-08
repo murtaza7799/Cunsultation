@@ -1,11 +1,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import checkEnvironment from '@/util/check-environment';
 import { SingleUser } from '@/src/types/user';
 import { BoardSlice } from '@/src/types/boards';
-import { collection, addDoc, getDocs, doc, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore';
 import { db } from '@/util/firebase';
-import { useState } from 'react';
-
 const initialState = {
   boards: [],
   status: 'idle',
@@ -47,7 +44,6 @@ export const createBoard = createAsyncThunk('board/create', async (_obj, { getSt
       createdBy: user.id,
       backgroundImage: '/boards/board-background.jpg'
     });
-    console.log('Document written with ID: ', docRef.id);
     return docRef;
   } catch (e) {
     return e;

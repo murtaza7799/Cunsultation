@@ -1,0 +1,100 @@
+import React from 'react';
+import { Box, Button, Checkbox, Input } from '@chakra-ui/react';
+import styles from './checkbox.module.scss';
+export default function InsertCheckBox({ inputList, setInputList }) {
+  // handle input change
+  const handleInputChange = (e, index) => {
+    const { name, value } = e.target;
+
+    const list = [...inputList];
+    list[index][name] = value;
+    setInputList(list);
+  };
+
+  // handle checkbox change
+  const handleCheckboxChange = (e, index) => {
+    const { checked } = e.target;
+    const list = [...inputList];
+    list[index].checked = checked;
+    setInputList(list);
+  };
+
+  // handle click event of the Remove button
+  const handleRemoveClick = (index) => {
+    const list = [...inputList];
+    list.splice(index, 1);
+    setInputList(list);
+    // department(list, values);
+  };
+
+  // handle click event of the Add button
+  const handleAddClick = () => {
+    setInputList([...inputList, { value: '', checked: false }]);
+  };
+
+  return (
+    <div>
+      {inputList.map((x, i) => {
+        return (
+          // eslint-disable-next-line react/jsx-key
+          <div className="box">
+            <Box display={'flex'}>
+              <Box>
+                <Input
+                  placeholder="Write your text here.."
+                  label="Department Name"
+                  variant="filled"
+                  fullWidth
+                  name="value"
+                  value={x.value}
+                  onChange={(e) => handleInputChange(e, i)}
+                />
+              </Box>
+
+              <br />
+              <Box display={'flex'} marginRig={5}>
+                <section title="CheckBox">
+                  <div className={styles.squaredTwo}>
+                    <Checkbox
+                      mr={5}
+                      colorScheme="green"
+                      onChange={(e) => handleCheckboxChange(e, i)}></Checkbox>
+                  </div>
+                </section>
+              </Box>
+            </Box>
+            <div>
+              {inputList.length !== 1 && (
+                <Button
+                  size="xs"
+                  variant="outline"
+                  colorScheme="red"
+                  onClick={() => handleRemoveClick(i)}>
+                  Remove
+                </Button>
+              )}
+              {inputList.length - 1 === i && (
+                <Button size="xs" colorScheme="telegram" onClick={handleAddClick}>
+                  Add
+                </Button>
+              )}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+export const getBase64Image = (url) => {
+  const img = new Image();
+  img.setAttribute('crossOrigin', 'anonymous');
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    const dataURL = canvas.toDataURL(url);
+  };
+  img.src = url;
+};

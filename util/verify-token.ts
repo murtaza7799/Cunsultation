@@ -3,7 +3,7 @@ import checkEnvironment from '@/util/check-environment';
 const verifyToken = async (ctx) => {
   const { token } = ctx.query;
   const host = checkEnvironment();
-  const isTokenValid = await fetch(`${host}/api/verify-token?token=${token}`);
+  const isTokenValid = await fetch(`/api/verify-token?token=${token}`);
   const json = await isTokenValid.json();
 
   if (json.message === 'valid') {

@@ -22,7 +22,12 @@ const host = checkEnvironment();
 
 export const fetchUser = createAsyncThunk('users/fetchUser', async (_obj, { getState }) => {
   const { user } = getState() as { user: UserDetail };
-  console.log('fetchUser id' + user.id);
+  // console.log('fetchUser id : ' + user.id);
+  // const response = await fetch(`/api/users/${user.id}`);
+  // const responseInjson = await response.json();
+  // // console.log(responseInjson);
+
+  // return responseInjson;
   const q = query(collection(db, 'Users'), where('_id', '==', user.id));
   const data = {
     _id: '',
@@ -40,8 +45,6 @@ export const fetchUser = createAsyncThunk('users/fetchUser', async (_obj, { getS
       // doc.data() is never undefined for query doc snapshots
       // console.log(doc.id, ' => ', doc.data());
     });
-    console.log('fech user Test data new ');
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error);
@@ -50,7 +53,7 @@ export const fetchUser = createAsyncThunk('users/fetchUser', async (_obj, { getS
 });
 
 export const verifyEmail = createAsyncThunk('verify-email', async (email) => {
-  const response = await fetch(`${host}/api/verify-email/?email=${email}`);
+  const response = await fetch(`/api/verify-email/?email=${email}`);
   const responseInjson = await response.json();
 
   return responseInjson;
@@ -61,16 +64,12 @@ export const userSlice = createSlice({
   initialState: initialState,
   reducers: {
     updateUserData: (state, { payload }) => {
-      console.log('updateUserData');
-      console.log(payload);
-      console.log(state.id);
       state[payload.type] = payload.value;
     },
     resetUserData: () => initialState
   },
   extraReducers: {
     [fetchUser.pending.toString()]: (state) => {
-      console.log('fecshuser pending');
       state.status = 'pending';
     },
     [fetchUser.fulfilled.toString()]: (state, { payload }) => {
@@ -78,10 +77,8 @@ export const userSlice = createSlice({
       state.id = payload && payload._id;
       state.email = payload && payload.email;
       state.fullName = payload && payload.fullName;
-      console.log('state.fullName ' + state.fullName);
     },
     [fetchUser.rejected.toString()]: (state, { payload }) => {
-      console.log('fecshuser rejected');
       state.status = 'failed';
       state.error = payload && payload.error;
       state.message = payload && payload.message;

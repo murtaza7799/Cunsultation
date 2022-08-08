@@ -18,7 +18,6 @@ const WithStore = (App) => {
       if (App.getInitialProps) {
         appProps = await App.getInitialProps(ctx);
       }
-
       return {
         ...appProps,
         reduxState: ctx.reduxState || setOrGetStore().getState()

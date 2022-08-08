@@ -1,35 +1,21 @@
 import React, { Component } from 'react';
 import { setOrGetStore } from '@/util/initialise-store';
+import isValidUser from '@/util/is-valid-user';
 import { updateUserData, fetchUser } from '@/src/slices/user';
-import isUserAuth from 'pages/services/userValidity';
 
 const WithAuth = (App) => {
   return class AppWithAuth extends Component {
     constructor(props) {
       super(props);
     }
+
     static async getInitialProps(ctx) {
       let appProps = {};
-      console.log('UserAuth at auth' + isUserAuth());
       const reduxStore = setOrGetStore();
       const { dispatch } = reduxStore;
-      const user = await isUserAuth();
-      if (user !== null) {
-        dispatch(updateUserData({ type: 'isValid', value: true }));
-        dispatch(updateUserData({ type: 'id', value: user['uid'] }));
-        dispatch(updateUserData({ type: 'email', value: user['email'] }));
-        dispatch(updateUserData({ type: 'fullName', value: 'TEst Name' }));
-        dispatch(fetchUser());
-        appProps = {
-          reduxState: reduxStore.getState()
-        };
-      } else {
-        console.log('User is null');
-        dispatch(updateUserData({ type: 'isValid', value: false }));
-        dispatch(fetchUser());
-        appProps = {
-          reduxState: reduxStore.getState()
-        };
+
+      const userDetails = isValidUser(ctx);
+      if (userDetails && !userDetails.isValid) {
         ctx.res.writeHead(307, {
           Location: '/login'
         });
@@ -40,12 +26,16 @@ const WithAuth = (App) => {
       if (App.getInitialProps) {
         appProps = await App.getInitialProps(ctx);
       }
-      // await dispatch(updateUserData({ type: 'isValid', value: true }));
-      // await dispatch(updateUserData({ type: 'id', value: userDetails && userDetails.id }));
-      // await dispatch(fetchUser());
+
+      await dispatch(updateUserData({ type: 'isValid', value: true }));
+
+      if (ctx.req) {
+        await dispatch(updateUserData({ type: 'id', value: userDetails && userDetails.id }));
+        await dispatch(fetchUser());
+      }
 
       ctx.reduxState = reduxStore.getState();
-      console.log('ctx.reduxState', reduxStore.getState());
+
       return {
         ...appProps
       };

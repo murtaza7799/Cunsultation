@@ -16,6 +16,8 @@ import { db } from '@/util/firebase';
 import { BoardSlice } from '@/src/types/boards';
 import shortId from 'shortid';
 import findIndex from 'lodash.findindex';
+import { ref, listAll, getDownloadURL } from 'firebase/storage';
+import { storage } from '@/util/firebase';
 
 type CardPatch = {
   _id: string;
@@ -51,6 +53,8 @@ export const fetchCards = createAsyncThunk('cards/fetchCards', async (_obj, { ge
       // console.log(doc.id, ' => ', doc.data());
     });
     const data = [...arr.map((item) => item)];
+    // console.log('fetch cards');
+    // console.log(data[0]._id);
     return data;
   } catch (error) {
     console.log(error);
@@ -96,6 +100,19 @@ export const addCard = createAsyncThunk('card/addCard', async (columnId: string,
   const { user } = getState() as { user: SingleUser };
   const { cards } = getState() as { cards: CardSlice };
 
+  const ImageSkaches = async () => {
+    const spaceRef = await ref(storage, '/images');
+    const filesRef = await listAll(spaceRef);
+    const files = await Promise.all(
+      filesRef.items.map(async (file) => {
+        const url = await getDownloadURL(file);
+        return url;
+      })
+    );
+    return files;
+  };
+  const images = await ImageSkaches();
+
   const filteredCards = cards.cards.filter((card) => card.columnId === columnId);
 
   let sequence = 1;
@@ -116,7 +133,8 @@ export const addCard = createAsyncThunk('card/addCard', async (columnId: string,
       dateCreated: new Date().toLocaleString(),
       userId: user.id,
       assignedTo: '',
-      sequence
+      sequence,
+      images: images
     });
     // console.log('Document written with ID: ', docRef.id);
     return docRef;
@@ -171,7 +189,7 @@ export const updateCardSequence = createAsyncThunk(
     //   columnId,
     //   sequence
     // };
-    console.log('update card sequence');
+    // console.log('update card sequence');
     const getId = {
       id: null
     };
