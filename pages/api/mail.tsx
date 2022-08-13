@@ -4,41 +4,43 @@ import sgMail from '@sendgrid/mail';
 import shortId from 'shortid';
 import uniqid from 'uniqid';
 
-// const sendMail = (email, res, emailData, user) => {
-//   const url = checkEnvironment();
-//   const page = 'signup';
+const sendMail = () => {
+  const url = checkEnvironment();
+  const page = 'signup';
 
-//   const msg = {
-//     to: email,
-//     from: 'dell41ankit@gmail.com',
-//     subject: 'You are invited to join to a trello clone board',
-//     html: `<div>
-//       <div style="height:100px; background-color:#26292c; color: white">
-//         <p>Trello Clone</p>
-//       <div>
-//       <div style="height:200px; background-color:#0079bf;">
-//         <a href='${url}/${page}?token=${emailData.token}&email=${email}&boardId=${emailData.boardId}'>Join</a>
-//       </div>
-//       <div style="height:100px; background-color:#26292c;">
+  const msg = {
+    to: 'murtazasarwar@live.com',
+    from: 'murtazasarwar66@gmail.com',
+    subject: 'You are invited to join to a trello clone board',
+    html: `<div>
+      <div style="height:100px; background-color:#26292c; color: white">
+        <p>Trello Clone</p>
+      <div>
+      <div style="height:200px; background-color:#0079bf;">
+       
+      </div>
+      <div style="height:100px; background-color:#26292c;">
 
-//       </div>
-//     </div>`
-//   };
+      </div>
+    </div>`
+  };
 
-//   sgMail
-//     .send(msg)
-//     .then(() => {
-//       res.send({ message: 'Email sent sucessfully', status: 200 });
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//       res.send({ message: 'Failed to send' });
-//     });
-// };
+  sgMail
+    .send(msg)
+    .then(() => {
+      console.log('Email sent');
+      // res.send({ message: 'Email sent sucessfully', status: 200 });
+    })
+    .catch((error) => {
+      console.error(error);
+      // res.send({ message: 'Failed to send' });
+    });
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+  await sendMail();
   // const { db, client } = await connectToDatabase();
 
   // if (client.isConnected()) {
