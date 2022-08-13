@@ -23,17 +23,17 @@ const withSidebar = (App, props) => {
     }
 
     render() {
-      const { page } = props;
+      // const { page } = props;
 
-      const sidebarMenu = [
-        { path: '/boards', buttonName: 'Boards', page: 'boards', icon: AiOutlineCreditCard }
-      ];
+      // const sidebarMenu = [
+      //   { path: '/boards', buttonName: 'Patient', page: 'boards', icon: AiOutlineCreditCard }
+      // ];
 
       return (
         <>
           <NavBar bg="white" />
-          <Box display="flex" mt="2%">
-            <Box
+          <Box display="flex" mt="2%" height="75%">
+            {/* <Box
               height="80vh"
               width="20vw"
               borderWidth="1px"
@@ -60,7 +60,7 @@ const withSidebar = (App, props) => {
                   </Link>
                 ))}
               </Box>
-            </Box>
+            </Box> */}
             <App />
           </Box>
         </>

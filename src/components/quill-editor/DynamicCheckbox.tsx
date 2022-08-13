@@ -1,7 +1,9 @@
 import React from 'react';
-import { Box, Button, Checkbox, Input } from '@chakra-ui/react';
+import { Box, Button, Checkbox, Input, Text } from '@chakra-ui/react';
 import styles from './checkbox.module.scss';
 export default function InsertCheckBox({ inputList, setInputList }) {
+  const checkBoxNo = 'No';
+  const checkBoxYes = 'Yes';
   // handle input change
   const handleInputChange = (e, index) => {
     const { name, value } = e.target;
@@ -12,10 +14,16 @@ export default function InsertCheckBox({ inputList, setInputList }) {
   };
 
   // handle checkbox change
-  const handleCheckboxChange = (e, index) => {
+  const handleCheckboxChange = (e, index, check) => {
     const { checked } = e.target;
+    // console.log('checked', e.target.checked.toString());
     const list = [...inputList];
-    list[index].checked = checked;
+    if (check === 'Yes' && checked) {
+      list[index].checked = true;
+    } else if (check === 'No' && checked) {
+      list[index].checked = false;
+    }
+    console.log(list);
     setInputList(list);
   };
 
@@ -28,60 +36,81 @@ export default function InsertCheckBox({ inputList, setInputList }) {
   };
 
   // handle click event of the Add button
-  const handleAddClick = () => {
-    setInputList([...inputList, { value: '', checked: false }]);
-  };
+  // const handleAddClick = () => {
+  //   setInputList([...inputList, { value: '', checked: false }]);
+  // };
 
   return (
     <div>
       {inputList.map((x, i) => {
         return (
           // eslint-disable-next-line react/jsx-key
-          <div className="box">
+          <Box className="box" margin={4} display={'flex'}>
             <Box display={'flex'}>
               <Box>
                 <Input
                   placeholder="Write your text here.."
-                  label="Department Name"
-                  variant="filled"
-                  fullWidth
+                  size="sm"
+                  marginTop={1}
+                  marginLeft="1rem"
+                  fontWeight="bold"
                   name="value"
+                  color={'black'}
                   value={x.value}
                   onChange={(e) => handleInputChange(e, i)}
                 />
               </Box>
 
               <br />
-              <Box display={'flex'} marginRig={5}>
+              <Box display={'flex'} marginLeft={5}>
+                <Text fontSize="sm" marginRight="1rem" marginTop={2} fontWeight="bold">
+                  Yes
+                </Text>
                 <section title="CheckBox">
                   <div className={styles.squaredTwo}>
                     <Checkbox
-                      mr={5}
+                      mr={3}
+                      defaultChecked={x.checked ? true : false}
+                      name="checked Yes"
                       colorScheme="green"
-                      onChange={(e) => handleCheckboxChange(e, i)}></Checkbox>
+                      onChange={(e) => handleCheckboxChange(e, i, checkBoxYes)}></Checkbox>
+                  </div>
+                </section>
+              </Box>
+              <Box display={'flex'} marginLeft={5}>
+                <Text fontSize="sm" marginRight="1rem" marginTop={2} fontWeight="bold">
+                  No
+                </Text>
+                <section title="CheckBox">
+                  <div className={styles.squaredTwo}>
+                    <Checkbox
+                      mr={3}
+                      name="checked No"
+                      defaultChecked={x.checked ? false : true}
+                      colorScheme="green"
+                      onChange={(e) => handleCheckboxChange(e, i, checkBoxNo)}></Checkbox>
                   </div>
                 </section>
               </Box>
             </Box>
             <div>
-              {inputList.length !== 1 && (
+              {inputList.length !== 0 && (
                 <Button
                   size="xs"
                   variant="outline"
                   colorScheme="red"
+                  margin={2}
                   onClick={() => handleRemoveClick(i)}>
                   Remove
                 </Button>
               )}
-              {inputList.length - 1 === i && (
-                <Button size="xs" colorScheme="telegram" onClick={handleAddClick}>
-                  Add
-                </Button>
-              )}
             </div>
-          </div>
+          </Box>
         );
       })}
+      {/* <Button size="xs" colorScheme="telegram" onClick={handleAddClick}>
+        Add
+      </Button> */}
     </div>
   );
 }

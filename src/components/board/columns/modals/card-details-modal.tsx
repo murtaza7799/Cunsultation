@@ -17,13 +17,21 @@ import {
   Badge,
   ModalCloseButton,
   useDisclosure,
-  useToast
+  useToast,
+  List,
+  ListItem,
+  Image
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { CardDetail } from '@/src/types/cards';
 import { deleteCard, fetchCards, updateCard } from '@/src/slices/cards';
 import { useAppSelector } from '@/src/hooks';
-import { AiOutlineDelete, AiOutlineClose, AiOutlineLaptop } from 'react-icons/ai';
+import {
+  AiOutlineDelete,
+  AiOutlineClose,
+  AiOutlineLaptop,
+  AiOutlineCheckSquare
+} from 'react-icons/ai';
 import { GrTextAlignFull } from 'react-icons/gr';
 import CardLabel from '@/src/components/board/columns/modals/card-labels-menu';
 import QuillEditor from '@/src/components/quill-editor';
@@ -32,6 +40,10 @@ import { saveAs } from 'file-saver';
 const quillToWord = typeof window === 'object' ? require('quill-to-word') : () => false;
 import { useReactToPrint } from 'react-to-print';
 import PDFDocument from './pdf';
+import LocalImages from '@/src/components/quill-editor/images';
+import { useQuill } from 'react-quilljs';
+import InsertCheckBox from '@/src/components/quill-editor/DynamicCheckbox';
+
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -39,6 +51,8 @@ type Props = {
 };
 
 const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
+  // const { forwardRef, useRef, useImperativeHandle } = React;
+  const { quill, quillRef, Quill } = useQuill();
   const dispatch = useDispatch();
   const [title, setTitle] = useState(card?.title);
   const [description, setDescription] = useState(card?.description);
@@ -107,37 +121,127 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     return doc.body;
   };
   const assignToMenu = () => {
+    const { isOpen, onOpen, onClose } = useDisclosure();
     return (
-      <Menu>
-        <MenuButton as={Button} size="xs" rightIcon={<AiOutlineDown />}>
-          Share
-        </MenuButton>
-        <MenuList>
-          <MenuItem onClick={saveAsWord}>Save as Word</MenuItem>
-          {renderDocument()}
-          <MenuItem onClick={handlePrint}>Print</MenuItem>
-          <MenuItem onClick={copyQuillText}>Copy</MenuItem>
-        </MenuList>
-      </Menu>
+      <Box width={'200px'} height={'150px'} display="flex" flexDirection="column">
+        <List spacing={1}>
+          <ListItem>
+            <Text alignContent={'center'} align={'center'} color={'black'}>
+              Share
+            </Text>
+          </ListItem>
+          <ListItem>
+            <Box>
+              <Menu>
+                <MenuItem
+                  as={Button}
+                  bg={'gray.200'}
+                  color={'gray.800'}
+                  w={'full'}
+                  h={'25px'}
+                  onClick={onOpen}>
+                  Save as PDF
+                </MenuItem>
+                <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior={'inside'}>
+                  <ModalOverlay />
+                  <ModalContent>
+                    <ModalCloseButton />
+                    <ModalBody>
+                      <PDFDocument description={description} />
+                    </ModalBody>
+                  </ModalContent>
+                </Modal>
+              </Menu>
+            </Box>
+          </ListItem>
+          <ListItem>
+            <Button
+              fontFamily={'heading'}
+              bg={'gray.200'}
+              color={'gray.800'}
+              w={'full'}
+              h={'25px'}
+              onClick={saveAsWord}>
+              Download As Word
+            </Button>
+          </ListItem>
+          <ListItem>
+            <Button
+              fontFamily={'heading'}
+              bg={'gray.200'}
+              color={'gray.800'}
+              w={'full'}
+              h={'25px'}
+              onClick={handlePrint}>
+              Print
+            </Button>
+          </ListItem>
+          <ListItem>
+            <Button
+              fontFamily={'heading'}
+              bg={'gray.200'}
+              color={'gray.800'}
+              w={'full'}
+              h={'25px'}
+              onClick={copyQuillText}>
+              Copy
+            </Button>
+          </ListItem>
+        </List>
+      </Box>
     );
   };
 
-  const renderDocument = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
-
+  function toDataURL(url, callback) {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+      };
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open('GET', url);
+    xhr.responseType = 'blob';
+    xhr.send();
+  }
+  const handleClick = (url) => {
+    if (quill) {
+      const range = quill?.getSelection();
+      const position = range ? range.index : 0;
+      // console.log('position ' + position);
+      const finalPosition = position;
+      // });
+      toDataURL(url, function (dataUrl) {
+        quill.insertEmbed(finalPosition, 'image', dataUrl);
+      });
+    }
+  };
+  const imageSketches = () => {
     return (
-      <Box>
-        <MenuItem onClick={onOpen}>Save as PDF</MenuItem>
-        <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior={'inside'}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalCloseButton />
-            <ModalBody>
-              <PDFDocument description={description} />
-            </ModalBody>
-          </ModalContent>
-        </Modal>
-      </Box>
+      <Menu matchWidth={true}>
+        <MenuButton
+          display={'flex'}
+          as={Button}
+          w={'full'}
+          h={'25px'}
+          rightIcon={<AiOutlineDown />}>
+          Insert Sketch
+        </MenuButton>
+        <MenuList zIndex="dropdown" maxHeight={'40vh'} overflowY={'scroll'}>
+          {LocalImages.map((data) => (
+            <MenuItem key={data.id}>
+              <Image
+                objectFit="cover"
+                boxSize="100px"
+                src={data.image}
+                alt="loading....."
+                onClick={() => handleClick(data.image)}
+              />
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
     );
   };
 
@@ -149,7 +253,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
         isOpen={isOpen}
         isCentered
         scrollBehavior={'inside'}>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px) hue-rotate(90deg)" />
+        <ModalOverlay bg="blackAlpha.700" backdropFilter="blur(20px) hue-rotate(90deg)" />
         {/* https://github.com/chakra-ui/chakra-ui/discussions/2676 */}
         <ModalContent display="flex" maxW="64rem">
           <ModalBody>
@@ -170,6 +274,12 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                 placeholder="Card title"
               />
             </Box>
+            <Box display={'flex'}>
+              <Box marginTop={6}>
+                {inputList.length > 0 ? <AiOutlineCheckSquare size={25} /> : null}
+              </Box>
+              <InsertCheckBox inputList={inputList} setInputList={setInputList} />
+            </Box>
             <Box display="flex">
               <Box width="90%" marginTop="2rem">
                 <Box display="flex" fontWeight="bold">
@@ -184,11 +294,35 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                     inputList={inputList}
                     setInputList={setInputList}
                     quillText={setQuillText}
+                    quill={quill}
+                    quillRef={quillRef}
                   />
                 </Box>
               </Box>
-              <Box display="flex" flexDirection="column">
-                <CardLabel id={card._id} boardId={card.boardId} />
+              <Box width={'200px'} height={'150px'} display="flex" flexDirection="column">
+                <List spacing={1}>
+                  <ListItem>
+                    <Text alignContent={'center'} align={'center'} color={'black'}>
+                      Insert
+                    </Text>
+                  </ListItem>
+                  <CardLabel id={card._id} boardId={card.boardId} />
+                  <ListItem>
+                    <Button
+                      fontFamily={'heading'}
+                      bg={'gray.200'}
+                      color={'gray.800'}
+                      w={'full'}
+                      h={'25px'}
+                      onClick={() => {
+                        setInputList([...inputList, { value: '', checked: false }]);
+                      }}>
+                      Checkbox
+                    </Button>
+                  </ListItem>
+                  <ListItem>{imageSketches()}</ListItem>
+                </List>
+                <br />
                 {assignToMenu()}
               </Box>
             </Box>

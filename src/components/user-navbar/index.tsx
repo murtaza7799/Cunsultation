@@ -8,7 +8,8 @@ import {
   MenuItem,
   MenuList,
   Avatar,
-  Text
+  Text,
+  Badge
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
@@ -47,17 +48,21 @@ const UserNavBar: FC = () => {
   };
 
   const renderButtons = () => {
+    console.log(user?.fullName);
     if (user?.isValid) {
       return (
         <>
+          <Box ml="3">
+            <Text color="white" fontWeight="bold">
+              Dr. {user?.fullName}
+            </Text>
+            <Text color="white" fontSize="sm">
+              {user?.email}
+            </Text>
+          </Box>
           <Menu>
             <MenuButton size="xs" mr="5px">
-              <Avatar
-                size="sm"
-                name={user?.fullName}
-                color="white"
-                src="https://bit.ly/tioluwani-kolawole"
-              />
+              <Avatar size="sm" name={user?.fullName} color="white" />
             </MenuButton>
             <MenuList>
               <MenuItem onClick={logout}>Log out</MenuItem>
@@ -80,16 +85,13 @@ const UserNavBar: FC = () => {
   };
 
   return (
-    <Box boxShadow="sm" bg="rgba(0,0,0,0.2)" display="flex " borderWidth="1px">
+    <Box boxShadow="lg" bg="rgba(0,0,0,0.2)" display="flex " borderWidth="1px" overflow="auto">
       <Link href="/boards">
-        <Button size="xs" ml="5px" mr="10px" my="5px">
-          Boards
+        <Button size="xs" ml="5px" mr="10px" my="8px">
+          Consultations
         </Button>
       </Link>
       <Spacer />
-      <Box size="md" m="10px" color="white">
-        <SiTrello />
-      </Box>
       <Text fontWeight="bold" fontSize="20px" mt="2px" color="white">
         ROOKS
       </Text>

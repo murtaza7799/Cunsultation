@@ -127,7 +127,7 @@ export const addColumnToBoard = createAsyncThunk(
       const docRef = await addDoc(collection(db, 'columns'), {
         _id: columnId,
         boardId: board.board._id,
-        columnName: 'Add title',
+        columnName: 'Consultations',
         dateCreated: new Date().toLocaleString(),
         userId: user.id,
         sequence
@@ -142,7 +142,7 @@ export const addColumnToBoard = createAsyncThunk(
 
 export const updateColumn = createAsyncThunk(
   'column/updateColumn',
-  async (obj: { columnName: string; columnId: string }, { getState }) => {
+  async (obj: { dateCreated: string; columnId: string }, { getState }) => {
     const { board } = getState() as { board: BoardSlice };
     const getId = {
       id: null
@@ -150,7 +150,7 @@ export const updateColumn = createAsyncThunk(
     const data = {
       _id: obj.columnId,
       boardName: board.board.name,
-      columnName: obj.columnName
+      columnName: obj.dateCreated
     };
     try {
       const q = query(

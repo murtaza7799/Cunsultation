@@ -22,16 +22,20 @@ type IProps = {
 
 const cardLabels = [
   {
-    type: 'Completed',
-    bg: '#61bd4f'
+    type: 'Relating',
+    bg: 'red'
   },
   {
-    type: 'Session Continued',
-    bg: '#f2d600'
+    type: 'Discovering',
+    bg: 'orange'
   },
   {
-    type: 'InComplete',
-    bg: '#eb5a46'
+    type: 'Examination',
+    bg: 'yellow'
+  },
+  {
+    type: 'Treatment',
+    bg: 'green'
   }
 ];
 
@@ -49,31 +53,20 @@ const CardLabel: FC<IProps> = ({ id, boardId }) => {
   };
 
   return (
-    <Box marginTop="2rem" flexDirection="column" width="20%">
-      <Text as="samp" whiteSpace="nowrap">
-        ADD TO CARD
-      </Text>
-      <List spacing={3} p="5px">
-        <ListItem>
-          <Menu size="xs">
-            <MenuButton leftIcon={<MdLabelOutline />} size="xs" whiteSpace="nowrap" as={Button}>
-              Labels
-            </MenuButton>
-            <MenuList padding="5px">
-              {cardLabels.map((item, index) => (
-                <MenuItem
-                  bg={item.bg}
-                  marginBottom="5px"
-                  key={index}
-                  onClick={() => handleClick(item)}>
-                  <Box minH="20px">{item.type}</Box>
-                </MenuItem>
-              ))}
-            </MenuList>
-          </Menu>
-        </ListItem>
-      </List>
-    </Box>
+    <ListItem>
+      <Menu>
+        <MenuButton w={'full'} whiteSpace="nowrap" h={'25px'} as={Button}>
+          Labels
+        </MenuButton>
+        <MenuList padding="5px">
+          {cardLabels.map((item, index) => (
+            <MenuItem bg={item.bg} marginBottom="5px" key={index} onClick={() => handleClick(item)}>
+              <Box minH="20px">{item.type}</Box>
+            </MenuItem>
+          ))}
+        </MenuList>
+      </Menu>
+    </ListItem>
   );
 };
 

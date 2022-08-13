@@ -127,14 +127,15 @@ export const addCard = createAsyncThunk('card/addCard', async (columnId: string,
       _id: cardId,
       columnId: columnId,
       boardId: board.board._id,
-      title: 'Add title',
+      title: 'Consultations',
       type: '',
       description: '',
       dateCreated: new Date().toLocaleString(),
       userId: user.id,
       assignedTo: '',
       sequence,
-      images: images
+      images: images,
+      questions: []
     });
     // console.log('Document written with ID: ', docRef.id);
     return docRef;
