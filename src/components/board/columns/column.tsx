@@ -29,7 +29,7 @@ const Column = ({ showCardDetail, column, index, id, cards }): JSX.Element => {
   const [showEditBox, setEditBoxVisibility] = useState<boolean>(false);
   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
 
-  const [columnName, setColumnName] = useState<string>(column.columnName);
+  const [columnName, setColumnName] = useState<string>(column.dateCreated);
   const cardsInSortedSequence = cards.sort(
     (cardA: CardDetail, cardB: CardDetail) => cardA.sequence - cardB.sequence
   );
@@ -88,7 +88,7 @@ const Column = ({ showCardDetail, column, index, id, cards }): JSX.Element => {
 
   const nameChange = async (value) => {
     const data = {
-      columnName: value,
+      dateCreated: value,
       columnId: column._id
     };
 
@@ -148,9 +148,9 @@ const Column = ({ showCardDetail, column, index, id, cards }): JSX.Element => {
               disabled={cardRequest}
               isLoading={cardRequest}
               display="flex"
-              loadingText="Adding card"
+              loadingText="Inserting consultation..."
               onClick={handleCardAdd}>
-              + Add a card
+              + New consultations
             </Button>
           </Box>
         </Box>

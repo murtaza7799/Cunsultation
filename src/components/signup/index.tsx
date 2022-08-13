@@ -192,7 +192,7 @@ const SignUp = (): JSX.Element => {
         </Text>
       </Box>
       <Flex
-        backdropFilter="auto"
+        backdropfilter="auto"
         bg="none"
         alignItems="center"
         flexDirection={['column', 'column', 'row', 'row']}

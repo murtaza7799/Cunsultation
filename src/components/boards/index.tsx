@@ -64,23 +64,26 @@ const Boards = (): JSX.Element => {
           colorScheme="green"
           size="lg"
           mt="1rem">
-          Create a board
+          New Patients
         </Button>
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Create board</ModalHeader>
+            <ModalHeader>Add Patient</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
               <Input
                 value={board.name}
                 onChange={(e) => handleChange(e)}
-                placeholder="Board name"
+                placeholder="Patient name"
               />
             </ModalBody>
             <ModalFooter>
-              <Button onClick={handleCreate} isLoading={boardRequest} loadingText="Creating board">
-                Create
+              <Button
+                onClick={handleCreate}
+                isLoading={boardRequest}
+                loadingText="inserting patient">
+                Insert
               </Button>
             </ModalFooter>
           </ModalContent>
@@ -93,6 +96,7 @@ const Boards = (): JSX.Element => {
     return (
       <Box mt="1rem" minWidth="50vw" display="flex" flexWrap="wrap">
         {boards.map((board, index) => (
+          // eslint-disable-next-line @next/next/link-passhref
           <Link
             key={index}
             href={{

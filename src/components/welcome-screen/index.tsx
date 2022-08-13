@@ -6,7 +6,7 @@ const WelcomeScreen = (): JSX.Element => {
   return (
     <>
       <Box
-        backdropFilter="blur(10px) hue-rotate(90deg)"
+        backdropfilter="blur(10px) hue-rotate(90deg)"
         backdropBlur="200px"
         height="100vh"
         w={'full'}

@@ -57,7 +57,7 @@ const BoardSettings = (): JSX.Element => {
       <Modal onClose={onClose} isOpen={isOpen} size="xl" isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Board Settings</ModalHeader>
+          <ModalHeader>Settings</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Tabs isFitted variant="enclosed">
@@ -68,7 +68,7 @@ const BoardSettings = (): JSX.Element => {
               <TabPanels>
                 <TabPanel>
                   <FormControl id="email">
-                    <FormLabel>Board name</FormLabel>
+                    <FormLabel>Patient name</FormLabel>
                     <Input
                       value={board.name}
                       onChange={(e) =>
@@ -88,7 +88,7 @@ const BoardSettings = (): JSX.Element => {
                   </Box>
                 </TabPanel>
                 <TabPanel>
-                  <p>To delete your board, Click on Delete button.</p>
+                  <p>To delete your Patient, Click on Delete button.</p>
                   <Box align="right">
                     <Button
                       bg="red.500"
