@@ -1,18 +1,7 @@
 import { useQuill } from 'react-quilljs';
 import React from 'react';
 import 'quill/dist/quill.snow.css';
-import {
-  Avatar,
-  Box,
-  Button,
-  IconButton,
-  Image,
-  keyframes,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList
-} from '@chakra-ui/react';
+import { Avatar, Box, Button, IconButton, Image, keyframes } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
@@ -113,74 +102,25 @@ const QuillEditor = ({
       console.log('browserSupportsContinuousListening');
     }
   };
-  // if (!browserSupportsSpeechRecognition) {
-  //   // eslint-disable-next-line react/no-unescaped-entities
-  //   return <span>Browser doesn't support speech recognition.</span>;
-  // }
-  // function toDataURL(url, callback) {
-  //   const xhr = new XMLHttpRequest();
-  //   xhr.onload = function () {
-  //     const reader = new FileReader();
-  //     reader.onloadend = function () {
-  //       callback(reader.result);
-  //     };
-  //     reader.readAsDataURL(xhr.response);
-  //   };
-  //   xhr.open('GET', url);
-  //   xhr.responseType = 'blob';
-  //   xhr.send();
-  // }
-  // const handleClick = (url) => {
-  //   if (quill) {
-  //     const range = quill?.getSelection();
-  //     const position = range ? range.index : 0;
-  //     // console.log('position ' + position);
-  //     const finalPosition = position;
-  //     // });
-  //     toDataURL(url, function (dataUrl) {
-  //       quill.insertEmbed(finalPosition, 'image', dataUrl);
-  //     });
-  //   }
-  // };
-  // const imageSketches = () => {
-  //   return (
-  //     <Menu>
-  //       <MenuButton display={'flex'} as={Button} size="xs" rightIcon={<AiOutlineDown />}>
-  //         Insert Sketch
-  //       </MenuButton>
-  //       <MenuList zIndex="dropdown" maxHeight={'60vh'} overflowY={'scroll'}>
-  //         {LocalImages.map((data) => (
-  //           <MenuItem key={data.id}>
-  //             <Image
-  //               objectFit="cover"
-  //               boxSize="200px"
-  //               src={data.image}
-  //               alt="loading....."
-  //               onClick={() => handleClick(data.image)}
-  //             />
-  //           </MenuItem>
-  //         ))}
-  //       </MenuList>
-  //     </Menu>
-  //   );
-  // };
   return (
     <Box mx={'auto'}>
-      <Box className="text-editor" width="95%">
-        <div ref={quillRef} />
+      <Box resize="vertical" width="95%" height="100px" overflow="auto">
+        <Box ref={quillRef}></Box>
       </Box>
+      <Box w="95%">
+        <hr />
+      </Box>
+
       <br></br>
       <Box display={'flex'}>
         <Box>
-          {/* {imageSketches()} */}
           <br />
-          {/* <InsertCheckBox inputList={inputList} setInputList={setInputList} /> */}
         </Box>
         <IconButton
           spinner={listening}
           variant="outline"
           display={'flex'}
-          marginLeft={'50%'}
+          marginLeft={'45%'}
           bg={listening ? 'red.300' : 'green.200'}
           h={'80px'}
           w={'80px'}

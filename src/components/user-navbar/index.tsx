@@ -48,7 +48,7 @@ const UserNavBar: FC = () => {
   };
 
   const renderButtons = () => {
-    console.log(user?.fullName);
+    // console.log(user?.fullName);
     if (user?.isValid) {
       return (
         <>

@@ -23,7 +23,7 @@ export default function InsertCheckBox({ inputList, setInputList }) {
     } else if (check === 'No' && checked) {
       list[index].checked = false;
     }
-    console.log(list);
+    // console.log(list);
     setInputList(list);
   };
 
