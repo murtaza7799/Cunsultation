@@ -20,7 +20,10 @@ import {
   useToast,
   List,
   ListItem,
-  Image
+  Image,
+  Grid,
+  GridItem,
+  SimpleGrid
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { CardDetail } from '@/src/types/cards';
@@ -43,7 +46,7 @@ import PDFDocument from './pdf';
 import LocalImages from '@/src/components/quill-editor/images';
 import { useQuill } from 'react-quilljs';
 import InsertCheckBox from '@/src/components/quill-editor/DynamicCheckbox';
-
+import Resizer from 'react-image-file-resizer';
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -51,7 +54,9 @@ type Props = {
 };
 
 const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
-  // const { forwardRef, useRef, useImperativeHandle } = React;
+  const [imageToResizeUri, setImageToResizeUri] = useState();
+  const [imageToResizeWidth, setImageToResizeWidth] = useState();
+  const [imageToResizeHeight, setImageToResizeHeight] = useState();
   const { quill, quillRef, Quill } = useQuill();
   const dispatch = useDispatch();
   const [title, setTitle] = useState(card?.title);
@@ -112,8 +117,10 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       console.log(error);
     }
   };
+  const htmlData =
+    '<body style="color:black;;margin:100px;width:60%"><div>' + description + '</div></body>';
   const handlePrint = useReactToPrint({
-    content: () => stringToHTML(description)
+    content: () => stringToHTML(htmlData)
   });
   const stringToHTML = function (str) {
     const parser = new DOMParser();
@@ -123,7 +130,14 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   const assignToMenu = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     return (
-      <Box width={'200px'} height={'150px'} display="flex" flexDirection="column">
+      <Box
+        width={'200px'}
+        height={'150px'}
+        display="flex"
+        flexDirection="column"
+        border={'1px'}
+        bg={'gray.50'}
+        borderColor="gray.300">
         <List spacing={1}>
           <ListItem>
             <Text alignContent={'center'} align={'center'} color={'black'}>
@@ -138,6 +152,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                   bg={'gray.200'}
                   color={'gray.800'}
                   w={'full'}
+                  border="1px"
+                  borderColor="gray.300"
+                  _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
                   h={'25px'}
                   onClick={onOpen}>
                   Save as PDF
@@ -159,6 +176,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
               fontFamily={'heading'}
               bg={'gray.200'}
               color={'gray.800'}
+              border="1px"
+              borderColor="gray.300"
+              _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
               w={'full'}
               h={'25px'}
               onClick={saveAsWord}>
@@ -170,6 +190,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
               fontFamily={'heading'}
               bg={'gray.200'}
               color={'gray.800'}
+              border="1px"
+              borderColor="gray.300"
+              _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
               w={'full'}
               h={'25px'}
               onClick={handlePrint}>
@@ -181,6 +204,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
               fontFamily={'heading'}
               bg={'gray.200'}
               color={'gray.800'}
+              border="1px"
+              borderColor="gray.300"
+              _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
               w={'full'}
               h={'25px'}
               onClick={copyQuillText}>
@@ -217,6 +243,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       });
     }
   };
+
   const imageSketches = () => {
     return (
       <Menu matchWidth={true}>
@@ -225,21 +252,28 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           as={Button}
           w={'full'}
           h={'25px'}
+          bg={'gray.200'}
+          _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
+          border="1px"
+          borderColor="gray.300"
           rightIcon={<AiOutlineDown />}>
           Insert Sketch
         </MenuButton>
-        <MenuList zIndex="dropdown" maxHeight={'40vh'} overflowY={'scroll'}>
-          {LocalImages.map((data) => (
-            <MenuItem key={data.id}>
-              <Image
-                objectFit="cover"
-                boxSize="100px"
-                src={data.image}
-                alt="loading....."
-                onClick={() => handleClick(data.image)}
-              />
-            </MenuItem>
-          ))}
+        <MenuList display={'auto'}>
+          <SimpleGrid columns={4} spacing={3}>
+            {LocalImages.map((image) => {
+              return (
+                <Image
+                  boxSize="50px"
+                  src={image.image}
+                  alt={image.image}
+                  key={image.id}
+                  onClick={() => handleClick(image.image)}
+                  _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
+                />
+              );
+            })}
+          </SimpleGrid>
         </MenuList>
       </Menu>
     );
@@ -253,9 +287,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
         isOpen={isOpen}
         isCentered
         scrollBehavior={'inside'}>
-        <ModalOverlay bg="blackAlpha.700" backdropFilter="blur(20px) hue-rotate(90deg)" />
+        <ModalOverlay bg="blackAlpha.800" backdropFilter="blur(20px) hue-rotate(90deg)" />
         {/* https://github.com/chakra-ui/chakra-ui/discussions/2676 */}
-        <ModalContent display="flex" maxW="64rem">
+        <ModalContent display="flex" maxW="70rem" borderBlock={10}>
           <ModalBody>
             {card.label && (
               <Badge bg={card.label.type} color="white">
@@ -275,9 +309,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
               />
             </Box>
             <Box display={'flex'}>
-              <Box marginTop={6}>
+              {/* <Box marginTop={6}>
                 {inputList.length > 0 ? <AiOutlineCheckSquare size={25} /> : null}
-              </Box>
+              </Box> */}
               <InsertCheckBox inputList={inputList} setInputList={setInputList} />
             </Box>
             <Box display="flex">
@@ -299,7 +333,15 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                   />
                 </Box>
               </Box>
-              <Box width={'200px'} height={'150px'} display="flex" flexDirection="column">
+              <Box
+                marginTop={5}
+                width={'200px'}
+                height={'120px'}
+                display="flex"
+                bg={'gray.50'}
+                flexDirection="column"
+                border={'1px'}
+                borderColor="gray.400">
                 <List spacing={1}>
                   <ListItem>
                     <Text alignContent={'center'} align={'center'} color={'black'}>
@@ -312,6 +354,9 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                       fontFamily={'heading'}
                       bg={'gray.200'}
                       color={'gray.800'}
+                      _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
+                      border="1px"
+                      borderColor="gray.300"
                       w={'full'}
                       h={'25px'}
                       onClick={() => {

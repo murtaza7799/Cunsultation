@@ -73,6 +73,16 @@ const NavBar: FC<IProps> = ({ bg }) => {
           ROOKS
         </Text>
         <Spacer />
+        <Text
+          fontSize="lg"
+          fontWeight="bold"
+          m="5"
+          color={'white'}
+          alignContent={'center'}
+          _hover={{ boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.5)' }}>
+          WELCOME {user?.fullName}
+        </Text>
+        <Spacer />
         {renderButtons()}
       </Flex>
     </Box>

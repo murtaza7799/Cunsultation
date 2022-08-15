@@ -55,7 +55,16 @@ const CardLabel: FC<IProps> = ({ id, boardId }) => {
   return (
     <ListItem>
       <Menu>
-        <MenuButton w={'full'} whiteSpace="nowrap" h={'25px'} as={Button}>
+        <MenuButton
+          w={'full'}
+          whiteSpace="nowrap"
+          h={'25px'}
+          as={Button}
+          border="1px"
+          _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
+          borderColor="gray.300"
+          bg={'gray.200'}
+          color={'black'}>
           Labels
         </MenuButton>
         <MenuList padding="5px">

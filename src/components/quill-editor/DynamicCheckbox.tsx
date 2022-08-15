@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Button, Checkbox, Input, Text } from '@chakra-ui/react';
-import styles from './checkbox.module.scss';
 export default function InsertCheckBox({ inputList, setInputList }) {
   const checkBoxNo = 'No';
   const checkBoxYes = 'Yes';
@@ -62,35 +61,27 @@ export default function InsertCheckBox({ inputList, setInputList }) {
               </Box>
 
               <br />
-              <Box display={'flex'} marginLeft={5}>
-                <Text fontSize="sm" marginRight="1rem" marginTop={2} fontWeight="bold">
+              <Box display={'flex'} marginLeft={8}>
+                <Checkbox
+                  mr={3}
+                  borderColor={'grey'}
+                  defaultChecked={x.checked ? true : false}
+                  name="checked Yes"
+                  colorScheme="green"
+                  onChange={(e) => handleCheckboxChange(e, i, checkBoxYes)}>
                   Yes
-                </Text>
-                <section title="CheckBox">
-                  <div className={styles.squaredTwo}>
-                    <Checkbox
-                      mr={3}
-                      defaultChecked={x.checked ? true : false}
-                      name="checked Yes"
-                      colorScheme="green"
-                      onChange={(e) => handleCheckboxChange(e, i, checkBoxYes)}></Checkbox>
-                  </div>
-                </section>
+                </Checkbox>
               </Box>
-              <Box display={'flex'} marginLeft={5}>
-                <Text fontSize="sm" marginRight="1rem" marginTop={2} fontWeight="bold">
+              <Box display={'flex'} marginLeft={4}>
+                <Checkbox
+                  mr={3}
+                  borderColor={'grey'}
+                  name="checked No"
+                  defaultChecked={x.checked ? false : true}
+                  colorScheme="green"
+                  onChange={(e) => handleCheckboxChange(e, i, checkBoxNo)}>
                   No
-                </Text>
-                <section title="CheckBox">
-                  <div className={styles.squaredTwo}>
-                    <Checkbox
-                      mr={3}
-                      name="checked No"
-                      defaultChecked={x.checked ? false : true}
-                      colorScheme="green"
-                      onChange={(e) => handleCheckboxChange(e, i, checkBoxNo)}></Checkbox>
-                  </div>
-                </section>
+                </Checkbox>
               </Box>
             </Box>
             <div>
@@ -108,22 +99,19 @@ export default function InsertCheckBox({ inputList, setInputList }) {
           </Box>
         );
       })}
-      {/* <Button size="xs" colorScheme="telegram" onClick={handleAddClick}>
-        Add
-      </Button> */}
     </div>
   );
 }
-export const getBase64Image = (url) => {
-  const img = new Image();
-  img.setAttribute('crossOrigin', 'anonymous');
-  img.onload = () => {
-    const canvas = document.createElement('canvas');
-    canvas.width = img.width;
-    canvas.height = img.height;
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0);
-    const dataURL = canvas.toDataURL(url);
-  };
-  img.src = url;
-};
+// export const getBase64Image = (url) => {
+//   const img = new Image();
+//   img.setAttribute('crossOrigin', 'anonymous');
+//   img.onload = () => {
+//     const canvas = document.createElement('canvas');
+//     canvas.width = img.width;
+//     canvas.height = img.height;
+//     const ctx = canvas.getContext('2d');
+//     ctx.drawImage(img, 0, 0);
+//     const dataURL = canvas.toDataURL(url);
+//   };
+//   img.src = url;
+// };

@@ -82,6 +82,7 @@ const Boards = (): JSX.Element => {
               <Button
                 onClick={handleCreate}
                 isLoading={boardRequest}
+                _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
                 loadingText="inserting patient">
                 Insert
               </Button>
@@ -113,6 +114,7 @@ const Boards = (): JSX.Element => {
                 rgba(0, 0, 0, 0.4)
               ),
               url(${board.backgroundImage})`}
+              _hover={{ boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.5)' }}
               backgroundPosition="center"
               backgroundRepeat="no-repeat"
               backgroundSize="cover"

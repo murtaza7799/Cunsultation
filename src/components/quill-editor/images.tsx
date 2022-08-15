@@ -5,10 +5,6 @@ const LocalImages = [
   },
   {
     id: 2,
-    image: '/doctor/brain.png'
-  },
-  {
-    id: 3,
     image: '/doctor/breast.png'
   },
   {

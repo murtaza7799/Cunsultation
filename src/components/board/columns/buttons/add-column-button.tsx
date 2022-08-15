@@ -23,6 +23,7 @@ const AddColumnButton: FC<Props> = ({ addColumn }) => {
         size="xs"
         my="10px"
         mx="5px"
+        _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
         backgroundColor="primary"
         color="black"
         onClick={addColumn}

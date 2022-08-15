@@ -1,12 +1,10 @@
 import { useQuill } from 'react-quilljs';
 import React from 'react';
 import 'quill/dist/quill.snow.css';
-import { Avatar, Box, Button, IconButton, Image, keyframes } from '@chakra-ui/react';
+import { Avatar, Box, Button, IconButton, Image, keyframes, Tooltip } from '@chakra-ui/react';
 import { useToast } from '@chakra-ui/react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
-import InsertCheckBox from './DynamicCheckbox';
-import LocalImages from './images';
 
 const QuillEditor = ({
   value,
@@ -104,7 +102,7 @@ const QuillEditor = ({
   };
   return (
     <Box mx={'auto'}>
-      <Box resize="vertical" width="95%" height="100px" overflow="auto">
+      <Box resize="vertical" width="95%" height="200px" overflow="auto">
         <Box ref={quillRef}></Box>
       </Box>
       <Box w="95%">
@@ -116,25 +114,32 @@ const QuillEditor = ({
         <Box>
           <br />
         </Box>
-        <IconButton
-          spinner={listening}
-          variant="outline"
-          display={'flex'}
-          marginLeft={'45%'}
-          bg={listening ? 'red.300' : 'green.200'}
-          h={'80px'}
-          w={'80px'}
-          isRound={true}
-          _hover={{ bg: 'green.300' }}
-          loadingText="Submitting"
-          colorScheme={listening ? 'red' : 'black'}
-          aria-label="Call Sage"
-          fontSize="20px"
-          icon={
-            listening ? <AiOutlineAudio size={'50px'} /> : <AiOutlineAudioMuted size={'50px'} />
-          }
-          onClick={listening ? stop : listen}
-        />
+        <Tooltip
+          hasArrow
+          bg="gray.300"
+          color="black"
+          label={listening ? 'Stop' : 'Start'}
+          placement="right-end">
+          <IconButton
+            spinner={listening}
+            variant="outline"
+            display={'flex'}
+            marginLeft={'45%'}
+            bg={listening ? 'red.300' : 'green.200'}
+            _hover={{ boxShadow: '0px 0px 30px rgba(0, 0, 0, 0.5)' }}
+            h={'80px'}
+            w={'80px'}
+            isRound={true}
+            loadingText="Submitting"
+            colorScheme={listening ? 'red' : 'black'}
+            aria-label="Call Sage"
+            fontSize="20px"
+            icon={
+              listening ? <AiOutlineAudio size={'50px'} /> : <AiOutlineAudioMuted size={'50px'} />
+            }
+            onClick={listening ? stop : listen}
+          />
+        </Tooltip>
         {listening ? (
           <Box
             as="div"
