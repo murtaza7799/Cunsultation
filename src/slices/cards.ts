@@ -111,7 +111,6 @@ export const addCard = createAsyncThunk('card/addCard', async (columnId: string,
     );
     return files;
   };
-  const images = await ImageSkaches();
 
   const filteredCards = cards.cards.filter((card) => card.columnId === columnId);
 
@@ -134,7 +133,6 @@ export const addCard = createAsyncThunk('card/addCard', async (columnId: string,
       userId: user.id,
       assignedTo: '',
       sequence,
-      images: images,
       questions: []
     });
     // console.log('Document written with ID: ', docRef.id);

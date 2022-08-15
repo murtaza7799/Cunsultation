@@ -9,8 +9,9 @@ import { useDispatch } from 'react-redux';
 import { fetchUsers } from '@/src/slices/users';
 
 import UnsplashDrawer from '@/src/components/sub-navbar/unsplash-in-drawer';
+import FilterModel from './filters';
 
-const SubNavbar = (): JSX.Element => {
+const SubNavbar = ({ setFilters }): JSX.Element => {
   const board = useAppSelector((state) => state.board.board);
   const users = useAppSelector((state) => state.users.users);
 
@@ -18,12 +19,17 @@ const SubNavbar = (): JSX.Element => {
 
   useEffect(() => {
     async function fetchMyAPI() {
+      // console.log('fetching api');
       await dispatch(fetchUsers());
     }
     fetchMyAPI();
   }, []);
 
   const loadBoardUsers = () => {
+    // users.map((user) => {
+    //   // console.log(user.fullName);
+    // });
+    // console.log('load board users');
     return users.map((user, index) => (
       <Tooltip label={user.fullName} aria-label="A tooltip" key={index}>
         <Avatar size="sm" name={user.fullName} mr="5px" src="" />
@@ -46,10 +52,13 @@ const SubNavbar = (): JSX.Element => {
         Patient Name: {board?.name}
       </Heading>
       <Box>{loadBoardUsers()}</Box>
-      <Box>
-        <InviteModal />
-        <BoardSettings />
-        <UnsplashDrawer />
+      <Box display="flex" alignItems="center" justifyContent="space-between">
+        <FilterModel setFilters={setFilters} />
+        <Box>
+          <InviteModal />
+          <BoardSettings />
+          <UnsplashDrawer />
+        </Box>
       </Box>
     </Box>
   );

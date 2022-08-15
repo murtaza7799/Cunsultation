@@ -9,6 +9,7 @@ import PropType from 'prop-types';
 
 const Board = (): JSX.Element => {
   const board = useAppSelector((state) => state.board.board);
+  const [filters, setFilters] = React.useState(null);
 
   return (
     <Box
@@ -18,8 +19,8 @@ const Board = (): JSX.Element => {
       backgroundRepeat="no-repeat"
       backgroundSize="cover">
       <UserNavbar />
-      <SubNavbar board={board} />
-      <BoardColumns />
+      <SubNavbar board={board} setFilters={setFilters} />
+      <BoardColumns filters={filters} />
     </Box>
   );
 };

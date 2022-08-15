@@ -16,13 +16,15 @@ import { updateCardSequence, updateCardSequenceToLocalState } from '@/src/slices
 
 import shortId from 'shortid';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+type BoxProps = {
+  setFilters: unknown;
+};
 
-const BoardColumns: FC = (): JSX.Element => {
+const BoardColumns = ({ filters }): JSX.Element => {
   const dispatch = useDispatch();
-
   const columns = useAppSelector((state) => state.columns.columns);
   const cards = useAppSelector((state) => state.cards.cards);
-
+  // console.log('filters', filters);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [cardDetail, setCardDetail] = useState<CardDetail>({ _id: '', title: '', description: '' });
 
@@ -163,6 +165,7 @@ const BoardColumns: FC = (): JSX.Element => {
                   index={index}
                   cards={filterCards(column._id)}
                   showCardDetail={showCardDetail}
+                  filters={filters}
                 />
               ))}
               {provided.placeholder}

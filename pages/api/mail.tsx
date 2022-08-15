@@ -1,76 +1,79 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import checkEnvironment from '@/util/check-environment';
-import sgMail from '@sendgrid/mail';
-import shortId from 'shortid';
-import uniqid from 'uniqid';
+import { arrayUnion, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { db } from '@/util/firebase';
 
-const sendMail = () => {
-  const url = checkEnvironment();
-  const page = 'signup';
-
-  const msg = {
-    to: 'murtazasarwar@live.com',
-    from: 'murtazasarwar66@gmail.com',
-    subject: 'You are invited to join to a trello clone board',
-    html: `<div>
-      <div style="height:100px; background-color:#26292c; color: white">
-        <p>Trello Clone</p>
-      <div>
-      <div style="height:200px; background-color:#0079bf;">
-       
-      </div>
-      <div style="height:100px; background-color:#26292c;">
-
-      </div>
-    </div>`
+const checkUser = async (email: string) => {
+  const getId = {
+    id: null
   };
-
-  sgMail
-    .send(msg)
-    .then(() => {
-      console.log('Email sent');
-      // res.send({ message: 'Email sent sucessfully', status: 200 });
-    })
-    .catch((error) => {
-      console.error(error);
-      // res.send({ message: 'Failed to send' });
-    });
+  const user = await query(collection(db, 'Users'), where('email', '==', email));
+  const querySnapshot = await getDocs(user);
+  querySnapshot.forEach((doc) => {
+    const data = doc.data();
+    // console.log(doc.id, ' => ', data);
+    if (data.email === email) {
+      getId.id = data._id;
+      // console.log(data._id);
+    }
+  });
+  return getId.id;
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const { email, boardId } = req.body;
+  const getId = {
+    id: null
+  };
+  const user = await checkUser(email);
+  if (user === null) {
+    res.send({ status: 400, message: "User doesn't exist" });
+  } else {
+    try {
+      const q = query(collection(db, 'boards'), where('_id', '==', boardId));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        // console.log(doc.id, ' => ', data);
+        if (data._id === boardId) {
+          getId.id = doc.id;
+          // console.log(getId.id);
+        }
+      });
+      if (getId.id !== null) {
+        await updateDoc(doc(db, 'boards', getId.id), {
+          users: arrayUnion(user)
+        });
+        res.send({ status: 200, message: 'Successfully Invited' });
+        // return docRef;
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
-  await sendMail();
+  // sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  // await sendMail();
   // const { db, client } = await connectToDatabase();
-
   // if (client.isConnected()) {
   //   const requestType = req.method;
-
   //   switch (requestType) {
   //     case 'POST': {
   //       const { email, boardId } = req.body;
-
   //       const token = uniqid();
   //       const id = shortId.generate();
-
   //       const emailData = {
   //         id,
   //         token,
   //         boardId
   //       };
-
   //       await db
   //         .collection('token')
   //         .insertOne({ token, userId: id, status: 'valid', email, boardId });
   //       const user = await db.collection('users').findOne({ email });
-
   //       await sendMail(email, res, emailData, user);
-
   //       res.status(200);
-
   //       return;
   //     }
-
   //     default:
   //       res.send({ message: 'DB error' });
   //       break;

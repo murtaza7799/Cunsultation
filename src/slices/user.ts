@@ -22,12 +22,6 @@ const host = checkEnvironment();
 
 export const fetchUser = createAsyncThunk('users/fetchUser', async (_obj, { getState }) => {
   const { user } = getState() as { user: UserDetail };
-  // console.log('fetchUser id : ' + user.id);
-  // const response = await fetch(`/api/users/${user.id}`);
-  // const responseInjson = await response.json();
-  // // console.log(responseInjson);
-
-  // return responseInjson;
   const q = query(collection(db, 'Users'), where('_id', '==', user.id));
   const data = {
     _id: '',

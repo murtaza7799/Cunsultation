@@ -9,12 +9,10 @@ import {
   ModalFooter,
   Button,
   useDisclosure,
-  Input
+  Input,
+  useToast
 } from '@chakra-ui/react';
-import checkEnvironment from '@/util/check-environment';
 import { useAppSelector } from '@/src/hooks';
-
-const host = checkEnvironment();
 
 const InviteModal = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -22,13 +20,19 @@ const InviteModal = () => {
   const [emailErr, setEmailErr] = useState(false);
   const [isMailSending, setMailSending] = useState(false);
   const board = useAppSelector((state) => state.board.board);
+  const user = useAppSelector((state) => state.user);
+  const toast = useToast();
 
   const validEmail = new RegExp('^[a-zA-Z0-9._:$!%-]+@[a-zA-Z0-9.-]+.[a-zA-Z]$');
 
   const handleClick = async () => {
     setMailSending(true);
+    if (email === user?.email) {
+      setEmailErr(true);
+      setMailSending(false);
+      return;
+    }
     await sendEmail();
-    setMailSending(false);
   };
 
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -61,9 +65,27 @@ const InviteModal = () => {
 
     const inJSON = await response.json();
 
+    if (inJSON.status === 400) {
+      toast({
+        title: 'Alert !',
+        description: "User doesn't exist",
+        status: 'error',
+        duration: 9000,
+        isClosable: true
+      });
+      setMailSending(false);
+    }
+
     if (inJSON.status === 200) {
       onClose();
       setEmail('');
+      toast({
+        title: 'Alert !',
+        description: 'User Added Successfully',
+        status: 'success',
+        duration: 9000,
+        isClosable: true
+      });
     }
   };
 

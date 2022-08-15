@@ -24,12 +24,15 @@ import debounce from 'lodash.debounce';
 import { CardDetail } from '@/src/types/cards';
 import { useAppSelector } from '@/src/hooks';
 
-const Column = ({ showCardDetail, column, index, id, cards }): JSX.Element => {
+const Column = ({ showCardDetail, column, index, id, cards, filters }): JSX.Element => {
   const dispatch = useDispatch();
   const [showEditBox, setEditBoxVisibility] = useState<boolean>(false);
   const cardRequest = useAppSelector((state) => state.cards.isRequesting);
-
+  const [colFilter, setColFilter] = useState();
   const [columnName, setColumnName] = useState<string>(column.dateCreated);
+  // console.log('columnFilter', filters);
+  // const cardsInSortedSequence = cards.sort((a, b) => a[filters] - b[filters]);
+
   const cardsInSortedSequence = cards.sort(
     (cardA: CardDetail, cardB: CardDetail) => cardA.sequence - cardB.sequence
   );
@@ -133,7 +136,11 @@ const Column = ({ showCardDetail, column, index, id, cards }): JSX.Element => {
               {(provided) => (
                 // 2px height is needed to make the drop work when there is no card.
                 <Box ref={provided.innerRef} {...provided.droppableProps} minHeight="2px">
-                  <Cards showCardDetail={showCardDetail} cards={cardsInSortedSequence} />
+                  <Cards
+                    showCardDetail={showCardDetail}
+                    cards={cardsInSortedSequence}
+                    filter={filters}
+                  />
                   {provided.placeholder}
                 </Box>
               )}

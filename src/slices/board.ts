@@ -61,7 +61,8 @@ export const fetchBoard = createAsyncThunk('board/get', async (slug: string) => 
     name: '',
     dateCreated: '',
     createdBy: '',
-    backgroundImage: ''
+    backgroundImage: '',
+    users: []
   };
   try {
     querySnapshot.forEach((doc) => {
@@ -72,6 +73,7 @@ export const fetchBoard = createAsyncThunk('board/get', async (slug: string) => 
       data.dateCreated = check.dateCreated;
       data.createdBy = check.createdBy;
       data.backgroundImage = check.backgroundImage;
+      data.users = check.users;
     });
     // console.log(data);
     return data;

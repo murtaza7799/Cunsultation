@@ -16,15 +16,25 @@ export const fetchBoards = createAsyncThunk('boards/fetchBoards', async (_obj, {
   const arr = [];
   const id = user.id;
   const q = query(collection(db, 'boards'), where('createdBy', '==', id));
-
-  const querySnapshot = await getDocs(q);
+  const invited = query(collection(db, 'boards'), where('users', 'array-contains', id));
+  const querySnapshotInvited = await getDocs(invited);
   try {
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      arr.push(data);
-      // doc.data() is never undefined for query doc snapshots
-      // console.log(doc.id, ' => ', doc.data());
-    });
+    const querySnapshot = await getDocs(q);
+    try {
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        arr.push(data);
+        // doc.data() is never undefined for query doc snapshots
+        // console.log(doc.id, ' => ', doc.data());
+      });
+      querySnapshotInvited.forEach((doc) => {
+        const data = doc.data();
+        // console.log(doc.id, ' => ', data);
+        arr.push(data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
     const data = [...arr.map((item) => item)];
     return data;
   } catch (error) {
@@ -42,7 +52,8 @@ export const createBoard = createAsyncThunk('board/create', async (_obj, { getSt
       name: board.board.name,
       dateCreated: board.board.dateCreated,
       createdBy: user.id,
-      backgroundImage: '/boards/board-background.jpg'
+      backgroundImage: '/boards/board-background.jpg',
+      users: []
     });
     return docRef;
   } catch (e) {

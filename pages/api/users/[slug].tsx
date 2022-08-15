@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           // doc.data() is never undefined for query doc snapshots
           // console.log(doc.id, ' => ', doc.data());
         });
-        // console.log('fech user Test data new ');
+        // console.log('fech user data at api ');
         // console.log(data);
         res.send(data);
       } catch (error) {
