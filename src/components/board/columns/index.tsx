@@ -1,7 +1,7 @@
 import React, { useState, FC } from 'react';
 import { Box, useDisclosure } from '@chakra-ui/react';
 import AddColumnButton from '@/src/components/board/columns/buttons/add-column-button';
-import CardDetailsModal from '@/src/components/board/columns/modals/card-details-modal';
+// import CardDetailsModal from '@/src/components/board/columns/modals/card-details-modal';
 import Column from '@/src/components/board/columns/column';
 import { CardDetail } from '@/src/types/cards';
 import { useAppSelector } from '@/src/hooks';
@@ -13,6 +13,13 @@ import {
   updateColumnSequence
 } from '@/src/slices/columns';
 import { updateCardSequence, updateCardSequenceToLocalState } from '@/src/slices/cards';
+import dynamic from 'next/dynamic';
+const CardDetailsModal = dynamic(
+  () => import('@/src/components/board/columns/modals/card-details-modal'),
+  {
+    ssr: false
+  }
+);
 
 import shortId from 'shortid';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';

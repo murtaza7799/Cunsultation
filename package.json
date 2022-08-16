@@ -10,6 +10,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
+    "@apoiase/quill-image-resize": "^4.0.1",
     "@chakra-ui/react": "^1.5.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
@@ -36,8 +37,12 @@
     "next-firebase-auth": "^1.0.0-canary.13",
     "nextjs-progressbar": "^0.0.10",
     "prop-types": "^15.8.1",
+    "quill": "^1.3.7",
     "quill-better-table-picker": "^1.0.2",
     "quill-blot-formatter": "^1.0.5",
+    "quill-image-resize-module": "^3.0.0",
+    "quill-image-resize-module-react": "^3.0.0",
+    "quill-magic-url": "^4.1.7",
     "quill-to-pdf": "^1.0.7",
     "quill-to-word": "^1.3.0",
     "react": "^17.0.2",

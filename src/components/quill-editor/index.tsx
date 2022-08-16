@@ -5,7 +5,8 @@ import { Avatar, Box, Button, IconButton, Image, keyframes, Tooltip } from '@cha
 import { useToast } from '@chakra-ui/react';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
-
+import BlotFormatter from 'quill-blot-formatter';
+import useEffect from 'react';
 const QuillEditor = ({
   value,
   onChange,
@@ -14,7 +15,8 @@ const QuillEditor = ({
   setInputList,
   quillText,
   quill,
-  quillRef
+  quillRef,
+  Quill
 }) => {
   const toast = useToast();
   const pulseRing = keyframes`
@@ -40,6 +42,28 @@ const QuillEditor = ({
     isMicrophoneAvailable
   } = useSpeechRecognition();
   // const { quill, quillRef, Quill } = useQuill();
+  // React.useEffect(() => {
+  //   if (quill) {
+  //     // const BlotFormatter = require('quill-blot-formatter');
+  //     Quill.register('modules/blotFormatter', BlotFormatter);
+  //   }
+  // });
+
+  if (!quill) {
+    console.log('you are on browser');
+    // For execute this line only once.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    // const  ImageResize  = require('quill-image-resize-module'); // Install with 'yarn add quill-magic-url'
+    Quill.register('modules/blotFormatter', BlotFormatter);
+  }
+  // const quill = new Quill(..., {
+  //   modules: {
+  //     ...
+  //     blotFormatter: {
+  //       // see config options below
+  //     }
+  //   }
+  // })
   React.useEffect(() => {
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML(value);
@@ -118,7 +142,7 @@ const QuillEditor = ({
           hasArrow
           bg="gray.300"
           color="black"
-          label={listening ? 'Stop' : 'Start'}
+          label={listening ? 'Stop' : 'Voice to Text'}
           placement="right-end">
           <IconButton
             spinner={listening}
