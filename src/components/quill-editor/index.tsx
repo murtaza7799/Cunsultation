@@ -41,29 +41,12 @@ const QuillEditor = ({
     browserSupportsContinuousListening,
     isMicrophoneAvailable
   } = useSpeechRecognition();
-  // const { quill, quillRef, Quill } = useQuill();
-  // React.useEffect(() => {
-  //   if (quill) {
-  //     // const BlotFormatter = require('quill-blot-formatter');
-  //     Quill.register('modules/blotFormatter', BlotFormatter);
-  //   }
-  // });
 
   if (!quill) {
     console.log('you are on browser');
-    // For execute this line only once.
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    // const  ImageResize  = require('quill-image-resize-module'); // Install with 'yarn add quill-magic-url'
+
     Quill.register('modules/blotFormatter', BlotFormatter);
   }
-  // const quill = new Quill(..., {
-  //   modules: {
-  //     ...
-  //     blotFormatter: {
-  //       // see config options below
-  //     }
-  //   }
-  // })
   React.useEffect(() => {
     if (quill) {
       quill.clipboard.dangerouslyPasteHTML(value);
@@ -139,11 +122,12 @@ const QuillEditor = ({
           <br />
         </Box>
         <Tooltip
+          isOpen
           hasArrow
           bg="gray.300"
           color="black"
           label={listening ? 'Stop' : 'Voice to Text'}
-          placement="right-end">
+          placement="right-start">
           <IconButton
             spinner={listening}
             variant="outline"

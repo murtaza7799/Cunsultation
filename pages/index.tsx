@@ -3,6 +3,7 @@ import withStore from '@/src/hoc/with-store';
 import withAuth from '@/src/hoc/with-auth';
 import { setOrGetStore } from '@/util/initialise-store';
 import isValidUser from '@/util/is-valid-user';
+import fs from 'fs';
 const WelcomeScreenWithStoreWithStore = withStore(WelcomeScreen);
 // const WelcomeScreenWithStore = withAuth(WelcomeScreenWithStoreWithStore);
 WelcomeScreenWithStoreWithStore.getInitialProps = async (ctx) => {

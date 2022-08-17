@@ -40,20 +40,24 @@ import QuillEditor from '@/src/components/quill-editor';
 import { AiOutlineDown } from 'react-icons/ai';
 import { saveAs } from 'file-saver';
 const quillToWord = typeof window === 'object' ? require('quill-to-word') : () => false;
-// const BlotFormatter = typeof window === 'object' ? require('quill-blot-formatter') : () => false;
 import { useReactToPrint } from 'react-to-print';
 import PDFDocument from './pdf';
 import LocalImages from '@/src/components/quill-editor/images';
 import { useQuill } from 'react-quilljs';
 import InsertCheckBox from '@/src/components/quill-editor/DynamicCheckbox';
 import jsPDF from 'jspdf';
-
+import * as htmlparser2 from 'htmlparser2';
+import { useRef } from 'react';
+import { ComponentToPrint } from './ComponentToPrint';
+import Pdf from 'react-to-pdf';
+import html2pdf from 'html2pdf.js';
+import HTMLtoDOCX from 'html-to-docx';
+import { Packer } from 'docx';
 type Props = {
   onClose: () => void;
   isOpen: boolean;
   card: CardDetail;
 };
-// const BlotFormatter = require('quill-blot-formatter');
 const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   function toDataURL(url, callback) {
     const xhr = new XMLHttpRequest();
@@ -78,6 +82,8 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     const [qilldata, setQillData] = useState();
     const cardRequest = useAppSelector((state) => state.cards.isRequesting);
     const cardDelete = useAppSelector((state) => state.cards.isDeleting);
+    const board = useAppSelector((state) => state.board.board);
+    const user = useAppSelector((state) => state.user);
     const [inputList, setInputList] = React.useState(
       card?.questions?.map((question) => {
         return {
@@ -108,10 +114,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
 
       onClose();
     };
-    React.useEffect(() => {
-      console.log('first render');
-    }, []);
-
     const copyQuillText = () => {
       const text = quillText;
       navigator.clipboard.writeText(text);
@@ -134,24 +136,43 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
         console.log(error);
       }
     };
-    const htmlData =
-      '<body style="color:black;;margin:100px;width:60%"><div>' + description + '</div></body>';
+
+    const componentRef = useRef();
     const handlePrint = useReactToPrint({
-      content: () => stringToHTML(htmlData)
+      content: () => componentRef.current
     });
-    const stringToHTML = function (str) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(str, 'text/html');
-      return doc.body;
-    };
-    const print = () => {
-      const pdf = new jsPDF('p', 'pt', 'a4');
-      pdf.html(document.getElementById('content'), {
-        callback: function (doc) {
-          doc.save('document.pdf');
+    const handleDownloadWord = useReactToPrint({
+      onPrintError: (error) => console.log(error),
+      content: () => componentRef.current,
+      removeAfterPrint: true,
+      print: async (printIframe) => {
+        const document = printIframe.contentDocument;
+        if (document) {
+          const html = document.getElementsByTagName('html')[0].innerHTML;
+          const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(html);
+          const fileDownload = document.createElement('a');
+          document.body.appendChild(fileDownload);
+          fileDownload.href = source;
+          fileDownload.download = title + '.doc';
+          fileDownload.click();
+          document.body.removeChild(fileDownload);
         }
-      });
-    };
+      }
+    });
+    const handleDownloadPDF = useReactToPrint({
+      onPrintError: (error) => console.log(error),
+      content: () => componentRef.current,
+      removeAfterPrint: true,
+      print: async (printIframe) => {
+        const document = printIframe.contentDocument;
+        if (document) {
+          const html = document.getElementsByTagName('html')[0];
+          const exporter = new html2pdf(html);
+          await exporter.getPdf(true);
+        }
+      }
+    });
+
     const assignToMenu = () => {
       const { isOpen, onOpen, onClose } = useDisclosure();
       return (
@@ -181,7 +202,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                     borderColor="gray.300"
                     _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
                     h={'25px'}
-                    onClick={print}>
+                    onClick={handleDownloadPDF}>
                     Save as PDF
                   </MenuItem>
                   <Modal isOpen={isOpen} onClose={onClose} isCentered scrollBehavior={'inside'}>
@@ -206,23 +227,34 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                 _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
                 w={'full'}
                 h={'25px'}
-                onClick={saveAsWord}>
+                onClick={handleDownloadWord}>
                 Download As Word
               </Button>
             </ListItem>
             <ListItem>
-              <Button
-                fontFamily={'heading'}
-                bg={'gray.200'}
-                color={'gray.800'}
-                border="1px"
-                borderColor="gray.300"
-                _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
-                w={'full'}
-                h={'25px'}
-                onClick={handlePrint}>
-                Print
-              </Button>
+              <Box>
+                <Button
+                  fontFamily={'heading'}
+                  bg={'gray.200'}
+                  color={'gray.800'}
+                  border="1px"
+                  borderColor="gray.300"
+                  _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
+                  w={'full'}
+                  h={'25px'}
+                  onClick={handlePrint}>
+                  Print
+                </Button>
+                <div style={{ display: 'none', margin: '100px' }}>
+                  <ComponentToPrint
+                    ref={componentRef}
+                    description={description}
+                    user={user}
+                    board={board}
+                    questions={inputList}
+                  />
+                </div>
+              </Box>
             </ListItem>
             <ListItem>
               <Button
