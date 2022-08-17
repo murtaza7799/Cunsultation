@@ -28,12 +28,7 @@ import { useDispatch } from 'react-redux';
 import { CardDetail } from '@/src/types/cards';
 import { deleteCard, fetchCards, updateCard } from '@/src/slices/cards';
 import { useAppSelector } from '@/src/hooks';
-import {
-  AiOutlineDelete,
-  AiOutlineClose,
-  AiOutlineLaptop,
-  AiOutlineCheckSquare
-} from 'react-icons/ai';
+import { AiOutlineDelete, AiOutlineClose, AiOutlineLaptop } from 'react-icons/ai';
 import { GrTextAlignFull } from 'react-icons/gr';
 import CardLabel from '@/src/components/board/columns/modals/card-labels-menu';
 import QuillEditor from '@/src/components/quill-editor';
@@ -45,14 +40,10 @@ import PDFDocument from './pdf';
 import LocalImages from '@/src/components/quill-editor/images';
 import { useQuill } from 'react-quilljs';
 import InsertCheckBox from '@/src/components/quill-editor/DynamicCheckbox';
-import jsPDF from 'jspdf';
-import * as htmlparser2 from 'htmlparser2';
 import { useRef } from 'react';
 import { ComponentToPrint } from './ComponentToPrint';
-import Pdf from 'react-to-pdf';
 import html2pdf from 'html2pdf.js';
-import HTMLtoDOCX from 'html-to-docx';
-import { Packer } from 'docx';
+
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -126,16 +117,16 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       });
     };
 
-    const saveAsWord = async () => {
-      try {
-        const data = await quillToWord.generateWord(qilldata, {
-          exportAs: 'blob'
-        });
-        await saveAs(data, title);
-      } catch (error) {
-        console.log(error);
-      }
-    };
+    // const saveAsWord = async () => {
+    //   try {
+    //     const data = await quillToWord.generateWord(qilldata, {
+    //       exportAs: 'blob'
+    //     });
+    //     await saveAs(data, title);
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
+    // };
 
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
@@ -353,9 +344,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                 />
               </Box>
               <Box display={'flex'}>
-                {/* <Box marginTop={6}>
-                {inputList.length > 0 ? <AiOutlineCheckSquare size={25} /> : null}
-              </Box> */}
                 <InsertCheckBox inputList={inputList} setInputList={setInputList} />
               </Box>
               <Box display="flex">

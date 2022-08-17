@@ -4,7 +4,6 @@ import withAuth from '@/src/hoc/with-auth';
 import { setOrGetStore } from '@/util/initialise-store';
 import isValidUser from '@/util/is-valid-user';
 const WelcomeScreenWithStoreWithStore = withStore(WelcomeScreen);
-// const WelcomeScreenWithStore = withAuth(WelcomeScreenWithStoreWithStore);
 WelcomeScreenWithStoreWithStore.getInitialProps = async (ctx) => {
   const reduxStore = setOrGetStore();
   const userDetails = isValidUser(ctx);
