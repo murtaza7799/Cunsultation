@@ -1,17 +1,10 @@
-const Undo = () => {
-  var canvas = document.getElementsByClassName('paint');
-  //   var ctx = document.querySelector('canvas').getContext('2d');
-  console.log(canvas.toDataURL());
+const Undo = ({ ref }) => {
+  var canvus = ref;
   var ctx;
-  if (canvas.length > 0) {
-    console.log('canvas found');
-    // ctx = canvas.getContext('2d');
-  } else {
-    console.log('canvas not found');
+  if (canvus !== null) {
+    
+    ctx = canvus.getContext('2d');
   }
-
-  //   var ctx = canvas.getContext('2d');
-
   var history = {
     redo_list: [],
     undo_list: [],
