@@ -126,7 +126,7 @@ const QuillEditor = ({
   };
   return (
     <Box mx={'auto'}>
-      <Box width="95%" height="full">
+      <Box width="95%" height="fixed">
         <Box resize="vertical" height="180px" overflow="auto" ref={quillRef}></Box>
       </Box>
       <Box w="95%">
