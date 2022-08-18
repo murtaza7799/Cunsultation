@@ -64,7 +64,7 @@ const resizeFile = (file) =>
       200,
       200,
       'PNG',
-      50,
+      100,
       0,
       (uri) => {
         resolve(uri);
