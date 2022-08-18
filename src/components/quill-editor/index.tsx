@@ -139,7 +139,7 @@ const QuillEditor = ({
           <br />
         </Box>
         <Tooltip
-          isOpen
+          defaultIsOpen
           hasArrow
           bg="gray.300"
           color="black"

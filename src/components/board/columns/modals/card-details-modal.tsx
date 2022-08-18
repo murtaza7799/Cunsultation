@@ -24,7 +24,8 @@ import {
   Image,
   Grid,
   GridItem,
-  SimpleGrid
+  SimpleGrid,
+  ModalHeader
 } from '@chakra-ui/react';
 import { useDispatch } from 'react-redux';
 import { CardDetail } from '@/src/types/cards';
@@ -47,6 +48,7 @@ import { ComponentToPrint } from './ComponentToPrint';
 import html2pdf from 'html2pdf.js';
 import { AlignAction, DeleteAction, ImageSpec } from 'quill-blot-formatter';
 import Resizer from 'react-image-file-resizer';
+import Painting from './paintingModule';
 type Props = {
   onClose: () => void;
   isOpen: boolean;
@@ -126,6 +128,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     const cardDelete = useAppSelector((state) => state.cards.isDeleting);
     const board = useAppSelector((state) => state.board.board);
     const user = useAppSelector((state) => state.user);
+    const [url, setUrl] = useState('');
     const [inputList, setInputList] = React.useState(
       card?.questions?.map((question) => {
         return {
@@ -135,6 +138,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       })
     );
     const [quillText, setQuillText] = React.useState('');
+    const [modelOpen, setModelOpen] = React.useState(false);
     const toast = useToast();
     const handleCardDelete = async () => {
       await dispatch(deleteCard(card._id));
@@ -167,17 +171,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
         isClosable: true
       });
     };
-
-    // const saveAsWord = async () => {
-    //   try {
-    //     const data = await quillToWord.generateWord(qilldata, {
-    //       exportAs: 'blob'
-    //     });
-    //     await saveAs(data, title);
-    //   } catch (error) {
-    //     console.log(error);
-    //   }
-    // };
 
     const componentRef = useRef();
     const handlePrint = useReactToPrint({
@@ -317,16 +310,16 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       );
     };
 
-    const handleClick = (url) => {
-      if (quill) {
-        const range = quill?.getSelection();
-        const position = range ? range.index : 0;
-        const finalPosition = position;
-        toDataURL(url, function (dataUrl) {
-          quill.insertEmbed(finalPosition, 'image', dataUrl);
-        });
-      }
-    };
+    // const handleClick = (url) => {
+    //   if (quill) {
+    //     const range = quill?.getSelection();
+    //     const position = range ? range.index : 0;
+    //     const finalPosition = position;
+    //     toDataURL(url, function (dataUrl) {
+    //       quill.insertEmbed(finalPosition, 'image', dataUrl);
+    //     });
+    //   }
+    // };
 
     const imageSketches = () => {
       return (
@@ -352,7 +345,10 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                     src={image.image}
                     alt={image.image}
                     key={image.id}
-                    onClick={() => handleClick(image.image)}
+                    onClick={() => {
+                      setModelOpen(true);
+                      setUrl(image.image);
+                    }}
                     _hover={{ boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.5)' }}
                   />
                 );
@@ -360,6 +356,30 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
             </SimpleGrid>
           </MenuList>
         </Menu>
+      );
+    };
+    const paintig = () => {
+      const { isOpen, onOpen, onClose } = useDisclosure();
+
+      return (
+        <Modal
+          closeOnOverlayClick={true}
+          size={'full'}
+          isOpen={modelOpen}
+          isCentered
+          scrollBehavior={'inside'}
+          onClose={() => setModelOpen(false)}>
+          <ModalOverlay />
+          <ModalContent display="flex" maxW="35rem" bg={'gray.100'}>
+            <ModalHeader>Draw Sketch</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Box display={'flex'}>
+                <Painting url={url} quill={quill} />
+              </Box>
+            </ModalBody>
+          </ModalContent>
+        </Modal>
       );
     };
 
@@ -375,6 +395,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           {/* https://github.com/chakra-ui/chakra-ui/discussions/2676 */}
           <ModalContent display="flex" maxW="70rem" borderBlock={10}>
             <ModalBody>
+              {paintig()}
               {card.label && (
                 <Badge bg={card.label.type} color="white">
                   {card.label.type}
