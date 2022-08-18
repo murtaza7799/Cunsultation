@@ -8622,6 +8622,11 @@ quill-image-resize-module@^3.0.0:
     quill "^1.2.2"
     raw-loader "^0.5.1"
 
+quill-image-super-solution-module@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/quill-image-super-solution-module/-/quill-image-super-solution-module-2.0.1.tgz#f0f597db31f5d266fc87614751c965499a122119"
+  integrity sha512-mXN7uN0R3CtnF1m0MkMxTKNVSUXPWmnJmQ+kC/RNa9dlJoC4NS0xQhHB+JRoR5eKZzywBxkVSHHygrskwBMSug==
+
 quill-magic-url@^4.1.7:
   version "4.1.7"
   resolved "https://registry.yarnpkg.com/quill-magic-url/-/quill-magic-url-4.1.7.tgz#69a88f1d9cd07df945117caef17b1ceb67c0d403"

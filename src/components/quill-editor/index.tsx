@@ -7,6 +7,7 @@ import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognitio
 import { AiOutlineAudio, AiOutlineAudioMuted, AiOutlineDown } from 'react-icons/ai';
 import BlotFormatter from 'quill-blot-formatter';
 import useEffect from 'react';
+import { container, ImageExtend, QuillWatch } from 'quill-image-super-solution-module';
 const QuillEditor = ({
   value,
   onChange,
@@ -43,9 +44,25 @@ const QuillEditor = ({
   } = useSpeechRecognition();
 
   if (!quill) {
+    const Size = Quill.import('attributors/style/size');
+    Size.whitelist = [
+      '8px',
+      '10px',
+      '11px',
+      '12px',
+      '13px',
+      '14px',
+      '15px',
+      '16px',
+      '18px',
+      '24px',
+      '36px',
+      '48px'
+    ];
+    Quill.register(Size, true);
     console.log('you are on browser');
-
-    Quill.register('modules/blotFormatter', BlotFormatter);
+    Quill.register('modules/ImageExtend', ImageExtend);
+    Quill.register('modules/blotFormatter', BlotFormatter, true);
   }
   React.useEffect(() => {
     if (quill) {
@@ -110,7 +127,7 @@ const QuillEditor = ({
   return (
     <Box mx={'auto'}>
       <Box resize="vertical" width="95%" height="200px" overflow="auto">
-        <Box ref={quillRef}></Box>
+        <Box height={'auto'} ref={quillRef}></Box>
       </Box>
       <Box w="95%">
         <hr />

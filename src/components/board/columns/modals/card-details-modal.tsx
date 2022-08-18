@@ -1,3 +1,5 @@
+/* eslint-disable no-var */
+/* eslint-disable prefer-const */
 import React, { FC, useState } from 'react';
 import {
   Modal,
@@ -43,29 +45,78 @@ import InsertCheckBox from '@/src/components/quill-editor/DynamicCheckbox';
 import { useRef } from 'react';
 import { ComponentToPrint } from './ComponentToPrint';
 import html2pdf from 'html2pdf.js';
-
+import { AlignAction, DeleteAction, ImageSpec } from 'quill-blot-formatter';
+import Resizer from 'react-image-file-resizer';
 type Props = {
   onClose: () => void;
   isOpen: boolean;
   card: CardDetail;
 };
+class CustomImageSpec extends ImageSpec {
+  getActions() {
+    return [AlignAction, DeleteAction, ...super.getActions()];
+  }
+}
+const resizeFile = (file) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      200,
+      200,
+      'PNG',
+      50,
+      0,
+      (uri) => {
+        resolve(uri);
+      },
+      'base64'
+    );
+  });
 const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
   function toDataURL(url, callback) {
     const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      const reader = new FileReader();
-      reader.onloadend = function () {
-        callback(reader.result);
-      };
-      reader.readAsDataURL(xhr.response);
-    };
     xhr.open('GET', url);
     xhr.responseType = 'blob';
+    xhr.onload = function () {
+      resizeFile(xhr.response).then((uri) => {
+        callback(uri);
+      });
+    };
     xhr.send();
   }
+
+  // const xhr = new XMLHttpRequest();
+  // xhr.onload = function () {
+  //   const reader = new FileReader();
+  //   reader.onloadend = function () {
+  //     callback(reader.result);
+  //   };
+  //   reader.readAsDataURL(xhr.response);
+  // };
+  // xhr.open('GET', url);
+  // xhr.responseType = 'blob';
+  // xhr.send();
+  // }
   if (typeof window !== 'undefined') {
     const { quill, quillRef, Quill } = useQuill({
-      modules: { blotFormatter: {} }
+      modules: {
+        blotFormatter: {
+          specs: [CustomImageSpec],
+          overlay: {
+            style: {
+              border: '1px solid black',
+              position: 'absolute',
+              boxSizing: 'border-box'
+            },
+            align: {
+              attribute: 'data-align',
+              aligner: {
+                applyStyle: true
+              }
+            }
+          }
+        }
+      }
     });
     const dispatch = useDispatch();
     const [title, setTitle] = useState(card?.title);
@@ -270,9 +321,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       if (quill) {
         const range = quill?.getSelection();
         const position = range ? range.index : 0;
-        // console.log('position ' + position);
         const finalPosition = position;
-        // });
         toDataURL(url, function (dataUrl) {
           quill.insertEmbed(finalPosition, 'image', dataUrl);
         });
