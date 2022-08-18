@@ -12,12 +12,11 @@ const QuillEditor = ({
   value,
   onChange,
   quillContent,
-  inputList,
-  setInputList,
   quillText,
   quill,
   quillRef,
-  Quill
+  Quill,
+  tooltip
 }) => {
   const toast = useToast();
   const pulseRing = keyframes`
@@ -139,7 +138,7 @@ const QuillEditor = ({
           <br />
         </Box>
         <Tooltip
-          defaultIsOpen
+          isOpen={!tooltip}
           hasArrow
           bg="gray.300"
           color="black"

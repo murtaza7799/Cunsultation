@@ -309,18 +309,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
         </Box>
       );
     };
-
-    // const handleClick = (url) => {
-    //   if (quill) {
-    //     const range = quill?.getSelection();
-    //     const position = range ? range.index : 0;
-    //     const finalPosition = position;
-    //     toDataURL(url, function (dataUrl) {
-    //       quill.insertEmbed(finalPosition, 'image', dataUrl);
-    //     });
-    //   }
-    // };
-
     const imageSketches = () => {
       return (
         <Menu matchWidth={true}>
@@ -359,8 +347,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
       );
     };
     const paintig = () => {
-      const { isOpen, onOpen, onClose } = useDisclosure();
-
       return (
         <Modal
           closeOnOverlayClick={true}
@@ -375,7 +361,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
             <ModalCloseButton />
             <ModalBody>
               <Box display={'flex'}>
-                <Painting url={url} quill={quill} />
+                <Painting url={url} quill={quill} setModel={setModelOpen} />
               </Box>
             </ModalBody>
           </ModalContent>
@@ -427,12 +413,11 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
                       value={description}
                       onChange={setDescription}
                       quillContent={setQillData}
-                      inputList={inputList}
-                      setInputList={setInputList}
                       quillText={setQuillText}
                       quill={quill}
                       quillRef={quillRef}
                       Quill={Quill}
+                      tooltip={modelOpen}
                     />
                   </Box>
                 </Box>
