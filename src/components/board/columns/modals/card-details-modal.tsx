@@ -22,8 +22,6 @@ import {
   List,
   ListItem,
   Image,
-  Grid,
-  GridItem,
   SimpleGrid,
   ModalHeader
 } from '@chakra-ui/react';
@@ -36,8 +34,6 @@ import { GrTextAlignFull } from 'react-icons/gr';
 import CardLabel from '@/src/components/board/columns/modals/card-labels-menu';
 import QuillEditor from '@/src/components/quill-editor';
 import { AiOutlineDown } from 'react-icons/ai';
-import { saveAs } from 'file-saver';
-const quillToWord = typeof window === 'object' ? require('quill-to-word') : () => false;
 import { useReactToPrint } from 'react-to-print';
 import PDFDocument from './pdf';
 import LocalImages from '@/src/components/quill-editor/images';
@@ -59,33 +55,33 @@ class CustomImageSpec extends ImageSpec {
     return [AlignAction, DeleteAction, ...super.getActions()];
   }
 }
-const resizeFile = (file) =>
-  new Promise((resolve) => {
-    Resizer.imageFileResizer(
-      file,
-      200,
-      200,
-      'PNG',
-      100,
-      0,
-      (uri) => {
-        resolve(uri);
-      },
-      'base64'
-    );
-  });
+// const resizeFile = (file) =>
+//   new Promise((resolve) => {
+//     Resizer.imageFileResizer(
+//       file,
+//       200,
+//       200,
+//       'PNG',
+//       100,
+//       0,
+//       (uri) => {
+//         resolve(uri);
+//       },
+//       'base64'
+//     );
+//   });
 const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
-  function toDataURL(url, callback) {
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', url);
-    xhr.responseType = 'blob';
-    xhr.onload = function () {
-      resizeFile(xhr.response).then((uri) => {
-        callback(uri);
-      });
-    };
-    xhr.send();
-  }
+  // function toDataURL(url, callback) {
+  //   const xhr = new XMLHttpRequest();
+  //   xhr.open('GET', url);
+  //   xhr.responseType = 'blob';
+  //   xhr.onload = function () {
+  //     resizeFile(xhr.response).then((uri) => {
+  //       callback(uri);
+  //     });
+  //   };
+  //   xhr.send();
+  // }
 
   if (typeof window !== 'undefined') {
     const { quill, quillRef, Quill } = useQuill({
@@ -117,6 +113,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     const board = useAppSelector((state) => state.board.board);
     const user = useAppSelector((state) => state.user);
     const [url, setUrl] = useState('');
+    const [image, setImage] = useState([...card?.images]);
     const [inputList, setInputList] = React.useState(
       card?.questions?.map((question) => {
         return {
@@ -125,6 +122,7 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
         };
       })
     );
+    console.log(image);
     const [quillText, setQuillText] = React.useState('');
     const [modelOpen, setModelOpen] = React.useState(false);
     const toast = useToast();
@@ -314,11 +312,11 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
           </MenuButton>
           <MenuList display={'auto'}>
             <SimpleGrid columns={4} spacing={3}>
-              {LocalImages.map((image) => {
+              {image.map((image) => {
                 return (
                   <Image
                     boxSize="50px"
-                    src={image.image}
+                    src={image?.image}
                     alt={image.image}
                     key={image.id}
                     onClick={() => {

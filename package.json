@@ -1,6 +1,8 @@
 {
-  "name": "ROOKS",
+  "name": "rooks",
   "version": "1.0.0",
+  "private": true,
+  "description": "",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

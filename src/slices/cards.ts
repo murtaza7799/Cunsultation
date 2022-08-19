@@ -18,6 +18,7 @@ import shortId from 'shortid';
 import findIndex from 'lodash.findindex';
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/util/firebase';
+import LocalImages from '@/src/components/quill-editor/images';
 
 type CardPatch = {
   _id: string;
@@ -36,8 +37,6 @@ const initialState = {
   doneFetching: true,
   error: {}
 };
-
-const host = checkEnvironment();
 
 export const fetchCards = createAsyncThunk('cards/fetchCards', async (_obj, { getState }) => {
   const { board } = getState() as { board: BoardSlice };
@@ -121,6 +120,8 @@ export const addCard = createAsyncThunk('card/addCard', async (columnId: string,
   }
 
   const cardId = shortId.generate();
+  const images = await LocalImages;
+  console.log(images);
   try {
     const docRef = await addDoc(collection(db, 'cards'), {
       _id: cardId,
@@ -133,7 +134,8 @@ export const addCard = createAsyncThunk('card/addCard', async (columnId: string,
       userId: user.id,
       assignedTo: '',
       sequence,
-      questions: []
+      questions: [],
+      images: images
     });
     // console.log('Document written with ID: ', docRef.id);
     return docRef;

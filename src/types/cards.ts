@@ -8,7 +8,12 @@ export type CardDetail = {
   sequence?: number;
   label?: Label;
   questions?: Questions[];
-  images?: string[];
+  images?: [
+    {
+      id: string;
+      image: string;
+    }
+  ];
 };
 export type Questions = {
   checked?: boolean;
