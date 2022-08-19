@@ -87,7 +87,7 @@ const WelcomeScreen = (): JSX.Element => {
             Organize your consultation notes, from text, sketches, label your consultation
             experience with AI-based tools.
           </Heading>
-          {/* <Heading
+          <Heading
             as="h2"
             size="md"
             color="primary.800"
@@ -95,10 +95,8 @@ const WelcomeScreen = (): JSX.Element => {
             fontWeight="normal"
             lineHeight={1.5}
             textAlign={['center', 'center', 'left', 'left']}>
-            Notes seem to be one of the most underestimated tasks for physicians during and after
-            consultation. Rooks makes it digitally and virtually easy to produce notes right after
-            consultation, especially with voice-to-text and other writing tools to ease the process
-          </Heading> */}
+            In a few minutes, prepare your patients consultation notes with ease.
+          </Heading>
         </Stack>
       </Flex>
       <hr />
