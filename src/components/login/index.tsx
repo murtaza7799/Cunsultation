@@ -27,6 +27,7 @@ const Login = () => {
 
   const [isFetching, setIsFetching] = useState(false);
   const [hasError, setErrorState] = useState(false);
+  const [isForget, setIsForget] = useState(false);
 
   const router = useRouter();
 
@@ -184,6 +185,11 @@ const Login = () => {
               <Box m="5" textAlign="center">
                 <Link href="/signup" color="brand" p="2">
                   Sign up for an account
+                </Link>
+              </Box>
+              <Box m="5" textAlign="center">
+                <Link href="/forget" color="brand" p="2">
+                  Forgot Password
                 </Link>
               </Box>
               {showLoginError()}
