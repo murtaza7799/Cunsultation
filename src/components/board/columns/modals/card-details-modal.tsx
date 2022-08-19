@@ -122,7 +122,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
         };
       })
     );
-    console.log(image);
     const [quillText, setQuillText] = React.useState('');
     const [modelOpen, setModelOpen] = React.useState(false);
     const toast = useToast();
