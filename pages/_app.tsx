@@ -39,6 +39,8 @@ const TrelloApp = ({ Component, pageProps }) => {
       backgroundPosition={'center center'}>
       <Head>
         <title>ROOKS</title>
+        <link rel="shortcut icon" href="/logo.png"></link>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <NextNprogress color="#70b500" startPosition={0.3} stopDelayMs={200} height={4} />
       <ChakraProvider theme={theme}>

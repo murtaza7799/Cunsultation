@@ -68,10 +68,7 @@ const NavBar: FC<IProps> = ({ bg }) => {
   return (
     <Box boxShadow="md" borderWidth="1px">
       <Flex>
-        {/* <Image height="8" src="/trello-logo.svg" alt="brand logo" m="5"></Image> */}
-        <Text fontSize="lg" fontWeight="bold" m="5" color={'white'}>
-          ROOKS
-        </Text>
+        <Image height="8" src="/brandname.png" alt="brand logo" m="5"></Image>
         <Spacer />
         {user?.isValid ? (
           <Text

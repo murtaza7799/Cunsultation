@@ -104,9 +104,7 @@ const Login = () => {
   return (
     <Box>
       <Box display="flex" justifyContent="center" alignItems="center">
-        <Text fontWeight="bold" fontSize="28px" m="50px" color={'white'}>
-          ROOKS
-        </Text>
+        <Image src="/brandname.png" w="300px" height="70px" m="30px" color={'white'} />
       </Box>
 
       <Flex

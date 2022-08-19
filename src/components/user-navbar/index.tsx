@@ -9,7 +9,8 @@ import {
   MenuList,
   Avatar,
   Text,
-  Badge
+  Badge,
+  Image
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
@@ -92,9 +93,8 @@ const UserNavBar: FC = () => {
         </Button>
       </Link>
       <Spacer />
-      <Text fontWeight="bold" fontSize="20px" mt="2px" color="white">
-        ROOKS
-      </Text>
+      <Image height="6" src="/brandname.png" alt="brand logo" m="3"></Image>
+
       <Spacer />
       {renderButtons()}
     </Box>

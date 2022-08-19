@@ -179,17 +179,8 @@ const SignUp = (): JSX.Element => {
       }
       backgroundSize={'cover'}
       backgroundPosition={'center center'}>
-      <Box display="flex">
-        <Text
-          color={'white'}
-          fontSize="xl"
-          fontWeight="bold"
-          height="30px"
-          ml="auto"
-          mr="auto"
-          my="40px">
-          ROOKS
-        </Text>
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <Image src="/brandname.png" w="300px" height="70px" m="25px" />
       </Box>
       <Flex
         backdropfilter="auto"

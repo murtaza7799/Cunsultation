@@ -138,7 +138,7 @@ const Painting = ({ url, quill, setModel }) => {
   };
   return (
     <Box>
-      <Box>
+      {/* <Box>
         <p>check</p>
         <button type="button" disabled={undo === 0} onClick={undoLastOperation}>
           Undo
@@ -147,7 +147,7 @@ const Painting = ({ url, quill, setModel }) => {
         <button type="button" disabled={redo === 0} onClick={redoLastOperation}>
           Redo
         </button>
-      </Box>
+      </Box> */}
       <ReactPainter
         width={500}
         height={500}
@@ -155,14 +155,14 @@ const Painting = ({ url, quill, setModel }) => {
         image={url}
         render={({ triggerSave, canvas, setColor, getCanvasProps }) => (
           <Box className={styles.png}>
-            {/* <div>
+            <div>
               <text
                 style={{ justifyContent: 'space-between', marginTop: '10px', fontSize: '20px' }}>
                 Select Pen Color :{' '}
               </text>
               <input type="color" title="Colors" onChange={(e) => setColor(e.target.value)} />
               <hr />
-            </div> */}
+            </div>
             <Box bg={'white'}>
               <div style={{ justifyContent: 'space-between', marginTop: '10px' }}>
                 <canvas
