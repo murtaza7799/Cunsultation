@@ -87,18 +87,6 @@ const CardDetailsModal: FC<Props> = ({ onClose, isOpen, card }) => {
     xhr.send();
   }
 
-  // const xhr = new XMLHttpRequest();
-  // xhr.onload = function () {
-  //   const reader = new FileReader();
-  //   reader.onloadend = function () {
-  //     callback(reader.result);
-  //   };
-  //   reader.readAsDataURL(xhr.response);
-  // };
-  // xhr.open('GET', url);
-  // xhr.responseType = 'blob';
-  // xhr.send();
-  // }
   if (typeof window !== 'undefined') {
     const { quill, quillRef, Quill } = useQuill({
       modules: {

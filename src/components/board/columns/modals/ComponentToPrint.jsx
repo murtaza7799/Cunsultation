@@ -1,5 +1,5 @@
 import * as React from 'react';
-
+import Image from 'next/image';
 export class ComponentToPrint extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -12,6 +12,13 @@ export class ComponentToPrint extends React.PureComponent {
 
     return (
       <div style={{ margin: '30px', color: 'black', height: '90%' }}>
+        <img
+          src="/brandname.png"
+          alt="logo"
+          width={'200px'}
+          height={'70px'}
+          style={{ alignItems: 'center', alignSelf: 'center', marginLeft: '35%' }}
+        />
         <br />
         <div style={{ display: 'flex', justifyContent: 'space-between', margin: '10px' }}>
           <div>
