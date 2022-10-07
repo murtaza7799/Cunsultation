@@ -6,6 +6,7 @@ import Head from 'next/head';
 import NextNprogress from 'nextjs-progressbar';
 import 'regenerator-runtime/runtime';
 import 'nprogress/nprogress.css';
+import Script from 'next/script';
 // import initAuth from '@/util/initAuth';
 
 // // the module you created above
@@ -37,6 +38,19 @@ const TrelloApp = ({ Component, pageProps }) => {
       }
       backgroundSize={'cover'}
       backgroundPosition={'center center'}>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-37RZ1NCX0S"
+        strategy="lazyOnload"
+      />
+      <Script id="google-analytics" strategy="lazyOnload">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){window.dataLayer.push(arguments);}
+          gtag('js', new Date());
+
+          gtag('config', ''G-37RZ1NCX0S'');
+        `}
+      </Script>
       <Head>
         <title>ROOKS</title>
         <link rel="shortcut icon" href="/logo.png"></link>
