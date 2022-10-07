@@ -55,6 +55,16 @@ const TrelloApp = ({ Component, pageProps }) => {
         <title>ROOKS</title>
         <link rel="shortcut icon" href="/logo.png"></link>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta charSet="utf-8"></meta>
+        <meta name="keywords" content="AI-based tools patients consultation doctors notes"></meta>
+        <meta name="google" content="nositelinkssearchbox" key="sitelinks" />
+        <meta name="google" content="notranslate" key="notranslate" />
+        <meta
+          name="description"
+          content="Tired of having too many notes or follow-up for your patients after consultation? We get
+          it!.Organize your consultation notes, from text, sketches, label your consultation
+          experience with AI-based tools. In a few minutes, prepare your patients consultation notes with ease."
+        />
       </Head>
       <NextNprogress color="#70b500" startPosition={0.3} stopDelayMs={200} height={4} />
       <ChakraProvider theme={theme}>
